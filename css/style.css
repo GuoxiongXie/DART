@@ -416,7 +416,7 @@ Header & Menu CSS
 	position: fixed;
 	top: 120px;
 	left: 240px;
-	height: 420px;
+	height: 400px;
 	width: 720px;
 	display: none;
 	border-width: 1px;
@@ -590,23 +590,32 @@ Home Page CSS
 #follow p {
 	text-align: center;
 }
-#follow-twitter {
+#follow-setup {
 	text-align: center;
 	width: 150px;
 	height: 80px;
 	display: block;
-	padding-top: 20px;
+	padding-top: 40px;
 	float: left;
-	padding-left: 170px;
+	padding-left: 70px;
+}
+#follow-login {
+	text-align: center;
+	width: 150px;
+	height: 80px;
+	display: block;
+	padding-top: 40px;
+	float: left;
+	padding-left: 70px;
 }
 #follow-mail {
 	text-align: center;
 	width: 150px;
 	height: 80px;
 	display: block;
-	padding-top: 20px;
+	padding-top: 40px;
 	float: right;
-	padding-right: 170px;
+	padding-right: 70px;
 }
 /******************************************************************
 About us CSS

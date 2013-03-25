@@ -1,27 +1,18 @@
-<!--Note that this page is for manager to modify the project description,
-	TA goes in this page will be redirect to adminSetUpProj.html,
-	Regular user's access to this page is denied -->
-
-<?php
-include_once 'include/conn.php';
-include_once 'managerModifyProjDescription.php';
-?>
-
 <script language="javascript">
 /*Function:focus on the blank and alert the user to input the necessaries.
 */
 function check(form)
 {
-	//if(form.projectname.value=="")
-	//{
-		//alert("Please input the project name");
-		//form.projectname.focus();
-		//return false;		
-	//}
-	if(form.projectdesc.value=="")
+	if(form.riskName.value=="")
 	{
-		alert("Please input the project description");
-		form.projectdesc.focus();
+		alert("Please input the risk name");
+		form.riskName.focus();
+		return false;
+	}
+	if(form.riskDesc.value=="")
+	{
+		alert("Please input the risk description");
+		form.riskDesc.focus();
 		return false;
 	}
 	form.submit();
@@ -32,7 +23,7 @@ function check(form)
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Setup project</title>
+<title>Add Risks</title>
 <link rel="shortcut icon" href="favicon.ico" />
 <!-- Load CSS -->
 <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -111,29 +102,38 @@ function MM_validateForm() { //v4.0
   
   <!--This is the START of the contact section-->
   <div id="contact">
-    <h5 style="margin-top:0px;">Project Setup</h5>
-    <p>Enter updates to project information below</p>
-    <?php displayProjInfo(); ?> <!--newly added: call the function to populate the variables -->
-    <form method="post" action="setup.php" name="setup_form" id="contactform">
+    <h5 style="margin-top:0px;">Add Risks</h5>
+   
+    <form method="post" action="addRisks.php" name="add_risks_form" id="contactform">
       <div class="boxes">
-        <h6>Project name:</h6><br></br>
-        <div class="box">
-          <!--<input name="projectname" type="text" class="input" id="sender_name" title="Projname" value="" maxlength="2048"/></div>-->
-			<?php echo $projName; ?></div>
+       
+        
+            <h5>Enter new risk info.</h5><br></br>
+        
+      	<div>
+       		<h6>Risk name:&nbsp</h6> <div class="box">
+       	   	<input name="riskName" type="text"  class="input" id="sender_name" title="riskname" value="" maxlength="2048"/></div>
+
 			
-        <h6>Project description:</h6>
-        <div class="msgbox">
-          <?php
-          echo '<textarea name="projectdesc" class="message" id="cf_message" title="Description" value="" rows="50" cols="30" maxlength="2048">'.$projDesc.'</textarea>';
-          ?>
-        <!--size="30"-->
+			<h6>Risk Description:</h6>
+       		 <div class="msgbox">
+        	  <textarea name="riskDesc" class="message" id="cf_message" title="riskDescription" value="" rows="50" cols="30" maxlength="2048"></textarea>
+       	 	<!--size="30"-->
+        	</div>
+       	 
+        	<div class="submitbtn">
+            <input type="submit" name='Add Risk' class="button btncolor" onclick="return check(add_risks_form);" value="Add Risk" />
+        	</div>
         </div>
         
-        <div class="submitbtn">
-          <input type="submit" name='Update' class="button btncolor" onclick="return check(setup_form);" value="Update" />
-        </div>
-      </div>
+        <div class="spacer"></div>
+        
+
     </form>
+    	
+        
+
+    
   </div>
   <!--END of contact section-->
   
@@ -144,11 +144,16 @@ function MM_validateForm() { //v4.0
 <div id="slide-panel">
 	<!--This is the START of the follow section-->
 	<div id="follow">
-		<a href="login.html">
-		<div id="follow-twitter"><img src="images/login.png" />
+		<a href="TAsignin.html">
+		<div id="follow-setup"><img src="images/setup.jpg" />
+			<h4>TA Signin</h4>
+		</div>
+		</a>
+		<a href="login.html">	
+		<div id="follow-login"><img src="images/login.png" />
 			<h4>Login</h4>
 		</div>
-		</a><<!--a href="about.html"> -->
+		</a>
 		
 		<form method="post" action="logout.php">
 		<div id="follow-mail"><input type="image" src="images/logout.png" alt="Submit" name='Logout' value='Logout' />
@@ -157,7 +162,15 @@ function MM_validateForm() { //v4.0
 		</div>
 		</form>
 		
-		<h1>Thanks for Visiting!</h1>
+		<!--
+		<a href="about.html">
+		<div id="follow-mail"><img src="images/logout.png" />
+			<h4>Logout</h4>
+		</div>
+		</a>
+		-->
+		
+		<h1>Thanks for visiting!</h1>
 	</div>
 	<!--END of follow section-->
 </div>

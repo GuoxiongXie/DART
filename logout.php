@@ -1,6 +1,7 @@
 <?php
 /*destroy the session and logout to the index.php
 */
+//session_save_path('/Applications/XAMPP/htdocs/dartSession');	//this is the path to save session variables
 session_start();
 unset($_SESSION['username']);
 unset($_SESSION['authority']);

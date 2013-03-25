@@ -1,0 +1,150 @@
+<script language="javascript">
+/*Function:focus on the blank and alert the user to input the necessaries.
+*/
+function loginCheck(form)
+{
+	if(form.username.value=="")
+	{
+		alert("Please input the username");
+		form.username.focus();
+		return false;		
+	}
+	if(form.password.value=="")
+	{
+		alert("Please input the password");
+		form.password.focus();
+		return false;
+	}
+	form.submit();
+}
+
+/*Function: Check if info are entered before proceeding when trying to signup
+*/
+function signupCheck(form)
+{
+	if(form.username.value=="")
+	{
+		alert("Please input the username");
+		form.username.focus();
+		return false;		
+	}
+	if(form.password.value=="")
+	{
+		alert("Please input the password");
+		form.password.focus();
+		return false;
+	}
+	if(form.confirmPassword.value=="")
+	{
+		alert("Please confirm your password");
+		form.password.focus();
+		return false;
+	}
+	form.submit();
+}
+</script>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <title>TA Login</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body>
+
+	<div class="wrapper">
+
+		<form method="post" class="form1" action="adminLogin.php" name="TA_login_form">
+
+			<div class="formtitle">TA Login</div>
+
+			<div class="input">
+				<div class="inputtext">Username: </div>
+				<div class="inputcontent">
+
+					<input type="text" name="username"/>
+
+				</div>
+			</div>
+
+			<div class="input nobottomborder">
+				<div class="inputtext">Password: </div>
+				<div class="inputcontent">
+
+					<input type="password" name="password"/>
+					<br/><a href="#">Forgot password?</a>
+
+				</div>
+			</div>
+
+			<div class="buttons">
+
+				<input class="orangebutton" type="submit" value="Login" onclick="return loginCheck(TA_login_form);"/>
+				<input class="greybutton" type="submit" value="Cancel" /> <!-- debug: this should direct to about.html-->
+				
+			</div>
+
+		</form>
+
+		<form method="post" class="form2" action="adminSignUp.php" name="TA_signup_form">
+
+			<div class="formtitle">New Register</div>
+
+			<div class="input">
+				<div class="inputtext">Username: </div>
+				<div class="inputcontent">
+
+					<input type="text" name="username"/>
+
+				</div>
+			</div>
+
+			<div class="input">
+				<div class="inputtext">Password: </div>
+				<div class="inputcontent">
+
+					<input type="password" name="password"/>
+
+				</div>
+			</div>
+
+			<div class="input">
+				<div class="inputtext">Confirm Password: </div>
+				<div class="inputcontent">
+
+					<input type="password" name="confirmPassword"/>
+
+				</div>
+			</div>
+			
+			<!-- debug: why do we want TA message??
+			<div class="inputtextbox nobottomborder">
+				<div class="inputtext">TA Message: </div>
+				<div class="inputcontent">
+
+					<textarea class="textarea"></textarea>
+
+				</div>
+			</div>
+			-->
+			
+			<div class="buttons">
+
+				<input class="orangebutton" type="submit" value="Send" onclick="return signupCheck(TA_signup_form);"/>
+
+			</div>
+
+		</form>
+
+		
+
+	</div>	
+
+
+</body>
+</html>

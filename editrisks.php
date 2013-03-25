@@ -1,10 +1,35 @@
-<!--Note that this page is for manager to modify the project description,
-	TA goes in this page will be redirect to adminSetUpProj.html,
-	Regular user's access to this page is denied -->
-
 <?php
 include_once 'include/conn.php';
-include_once 'managerModifyProjDescription.php';
+require_once "include/connect_to_mysql.php";	//the reason I include this is because $conn->execute() doesn't work
+
+session_start();
+$projName = "";
+//$projDesc = "";
+//$authority = $_SESSION['authority'];
+//$projName = $_SESSION['project'];
+	
+function displayProjName() {
+	global $projName;
+	$projName = (string)$_SESSION['project'];	//$projName is of type object of no string casting
+	//echo gettype($projName);
+	//global $projDesc;
+	echo $projName;
+}
+	
+function riskSelect() {
+	global $conn;
+	$projName = $_SESSION['project'];
+	$sql = "select * from ProjRiskDesc where projName = '$projName'";
+		
+	$rst = $conn->execute($sql);
+	echo "<select name=\"name\" size=\"2\">";
+	while (!$rst->EOF) {
+		echo "<option value=\"".$rst->fields['riskName']."\">".$rst->fields['riskName']."</option>";
+		$rst->movenext();
+	}
+	echo "</select>";
+}
+	
 ?>
 
 <script language="javascript">
@@ -12,16 +37,16 @@ include_once 'managerModifyProjDescription.php';
 */
 function check(form)
 {
-	//if(form.projectname.value=="")
-	//{
-		//alert("Please input the project name");
-		//form.projectname.focus();
-		//return false;		
-	//}
-	if(form.projectdesc.value=="")
+	if(form.risks.value=="")
 	{
-		alert("Please input the project description");
-		form.projectdesc.focus();
+		alert("Please input the risk name");
+		form.risks.focus();
+		return false;
+	}
+	if(form.riskdesc.value=="")
+	{
+		alert("Please input the risk description");
+		form.riskdesc.focus();
 		return false;
 	}
 	form.submit();
@@ -32,7 +57,7 @@ function check(form)
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Setup project</title>
+<title>Edit Risks</title>
 <link rel="shortcut icon" href="favicon.ico" />
 <!-- Load CSS -->
 <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -111,29 +136,90 @@ function MM_validateForm() { //v4.0
   
   <!--This is the START of the contact section-->
   <div id="contact">
-    <h5 style="margin-top:0px;">Project Setup</h5>
-    <p>Enter updates to project information below</p>
-    <?php displayProjInfo(); ?> <!--newly added: call the function to populate the variables -->
-    <form method="post" action="setup.php" name="setup_form" id="contactform">
+    <h3 style="margin-top:0px;">Edit Risks</h3>
+    
+    <h6>Project name:&nbsp</h6> <div class="box">
+    <?php displayProjName() ?></div>
+    
+    <form method="post" action="deleteRisk.php" name="setup_form" id="contactform">
       <div class="boxes">
-        <h6>Project name:</h6><br></br>
-        <div class="box">
-          <!--<input name="projectname" type="text" class="input" id="sender_name" title="Projname" value="" maxlength="2048"/></div>-->
-			<?php echo $projName; ?></div>
+    	 <div class="spacer"></div>
+      	<h5>Select a risk to delete.</h5><br></br>
+        
+      	<div>
+       		<!--<h6>Project name:&nbsp</h6> <div class="box">
+       	   	<input name="projectname" type="text"  class="input" id="sender_name" title="Projname" value="" maxlength="2048"/></div>
+			-->
 			
-        <h6>Project description:</h6>
-        <div class="msgbox">
-          <?php
-          echo '<textarea name="projectdesc" class="message" id="cf_message" title="Description" value="" rows="50" cols="30" maxlength="2048">'.$projDesc.'</textarea>';
-          ?>
-        <!--size="30"-->
+       		<h6>Risk Item:&nbsp </h6>
+        	<?php
+					riskSelect();
+			?>
+        
+        	<div class="submitbtn">
+            <input type="submit" name='Delete Risk' class="button btncolor" onclick="return check(setup_form);" value="Delete Risk" />
+        	</div>
+        </div>
+      </form>
+      
+      
+      
+       
+        <div class="spacer"></div>
+        
+        <h5>Update the mitigation plan for the selected risk.</h5><br></br>
+        
+        <form method="post" action="updateMitigationPlan.php" name="setup_form" id="contactform">
+      	<div>
+       		<h6>Risk Item:&nbsp </h6>
+        	<?php
+					riskSelect();
+			?>
+			<br></br>
+			
+			<h6>Mitigation Plan:</h6>
+       		 <div class="msgbox">
+        	  <textarea name="plan" class="message" id="cf_message" title="plan" value="" rows="50" cols="30" maxlength="2048"></textarea>
+       	 	<!--size="30"-->
+        	</div>
+       	 
+        	<div class="submitbtn">
+            <input type="submit" name='Update Plan' class="button btncolor" onclick="return check(setup_form);" value="Update Plan" />
+        	</div>
+        </div>
+        </form>
+        
+        
+        <div class="spacer"></div>
+        
+            <h5>Modify the risk info shown below.</h5><br></br>
+        
+        <form method="post" action="editRiskDesc.php" name="update_description_form" id="contactform">
+      	<div>
+       		<h6>Risk Item:&nbsp </h6>
+        	<?php
+					riskSelect();
+			?>
+			<br></br>
+			
+			<h6>Risk Description:</h6>
+       		 <div class="msgbox">
+        	  <textarea name="riskdesc" class="message" id="cf_message" title="riskDescription" value="" rows="50" cols="30" maxlength="2048"></textarea>
+       	 	<!--size="30"-->
+        	</div>
+       	 
+        	<div class="submitbtn">
+            <input type="submit" name='Edit Risk' class="button btncolor" onclick="return check(update_description_form);" value="Edit Risk" />
+        	</div>
         </div>
         
-        <div class="submitbtn">
-          <input type="submit" name='Update' class="button btncolor" onclick="return check(setup_form);" value="Update" />
-        </div>
-      </div>
-    </form>
+        <div class="spacer"></div>
+
+    	</form>
+    	
+        
+
+    
   </div>
   <!--END of contact section-->
   
@@ -144,11 +230,16 @@ function MM_validateForm() { //v4.0
 <div id="slide-panel">
 	<!--This is the START of the follow section-->
 	<div id="follow">
-		<a href="login.html">
-		<div id="follow-twitter"><img src="images/login.png" />
+		<a href="TAsignin.html">
+		<div id="follow-setup"><img src="images/setup.jpg" />
+			<h4>TA Signin</h4>
+		</div>
+		</a>
+		<a href="login.html">	
+		<div id="follow-login"><img src="images/login.png" />
 			<h4>Login</h4>
 		</div>
-		</a><<!--a href="about.html"> -->
+		</a>
 		
 		<form method="post" action="logout.php">
 		<div id="follow-mail"><input type="image" src="images/logout.png" alt="Submit" name='Logout' value='Logout' />
@@ -157,7 +248,15 @@ function MM_validateForm() { //v4.0
 		</div>
 		</form>
 		
-		<h1>Thanks for Visiting!</h1>
+		<!--
+		<a href="about.html">
+		<div id="follow-mail"><img src="images/logout.png" />
+			<h4>Logout</h4>
+		</div>
+		</a>
+		-->
+		
+		<h1>Thanks for visiting!</h1>
 	</div>
 	<!--END of follow section-->
 </div>
