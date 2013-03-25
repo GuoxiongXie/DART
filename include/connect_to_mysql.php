@@ -3,7 +3,7 @@ $db_host = "localhost";
 // Place the username for the MySQL database here 
 $db_username = "root";  
 // Place the password for the MySQL database here 
-$db_pass = "Phoenix1218118";  
+$db_pass = "Some password here";  
 // Place the name for the MySQL database here 
 $db_name = "DART"; 
 
