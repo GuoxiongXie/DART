@@ -1,4 +1,42 @@
+<?php
+session_start();
+include_once 'include/conn.php';
 
+//verify that only manager can access this feature
+
+$role = $_SESSION['authority'];
+if ($role != "manager"){
+	echo "<script language='javascript'>alert('Sorry but you have to be a manager to add a stakeholder.');</script>";
+	echo "<script language='javascript'>window.location.href='setup.html';</script>";
+}
+?>
+
+<script language="javascript">
+/*Function:focus on the blank and alert the user to input the necessaries.
+*/
+function check(form)
+{
+	if(form.name.value=="")
+	{
+		alert("Please input a name for the stakeholder");
+		form.name.focus();
+		return false;
+	}
+	if(form.pw.value=="")
+	{
+		alert("Please input a password for the stakeholder");
+		form.pw.focus();
+		return false;
+	}
+	if (form.Stakeholder.value=="") {
+		alert("Please select a role for the stakeholder");
+		form.Stakeholder.focus();
+		return false;
+	}
+	
+	form.submit();
+}
+</script>
 
 <!doctype html>
 <html>
@@ -85,7 +123,7 @@ function MM_validateForm() { //v4.0
   <div id="contact">
     <h5 style="margin-top:0px;">Add Stakeholder</h5>
    
-    <form method="post" action="addstakeholder.php" name="setup_form" id="contactform">
+    <form method="post" action="addstakeholder.php" name="add_stakeholder_form" id="contactform">
       <div class="boxes">
             
             <h5>Enter new stakeholder info.</h5><br></br>
@@ -101,13 +139,15 @@ function MM_validateForm() { //v4.0
 
        		<h6>Role:&nbsp </h6>
         	<select name="Stakeholder" size="1">
+        	<option value=""></option>	
 			<option value="sm">Manager </option>
 			<option value="sn">Regular user </option>
+			
 			</select>
 			
 			
         	<div class="submitbtn">
-            <input type="submit" name='Add Stakeholder' class="button btncolor" value="Add Stakeholder" />
+            <input type="submit" name='Add Stakeholder' class="button btncolor" onclick="return check(add_stakeholder_form);" value="Add Stakeholder" />
         	</div>
         </div>
         

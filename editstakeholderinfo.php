@@ -9,7 +9,7 @@ if ($username == null) {
 }
 $newpwd = $_POST['pwd'];
 
-$cnewped = md5($newpwd);
+$cnewpwd = md5($newpwd);
 $sql = "update RegularUser set pwd = '$cnewpwd' where name = '$username'";
 $rst = $conn->execute($sql);
 if($rst==false) {

@@ -7,6 +7,12 @@ $projName = "";
 //$projDesc = "";
 //$authority = $_SESSION['authority'];
 //$projName = $_SESSION['project'];
+
+$role = $_SESSION['authority'];
+if ($role != "manager"){
+	echo "<script language='javascript'>alert('Sorry but you have to be a manager to edit a risk.');</script>";
+	echo "<script language='javascript'>window.location.href='setup.html';</script>";
+}
 	
 function displayProjName() {
 	global $projName;
@@ -35,14 +41,51 @@ function riskSelect() {
 <script language="javascript">
 /*Function:focus on the blank and alert the user to input the necessaries.
 */
-function check(form)
+function check_deletion(form)
 {
-	if(form.risks.value=="")
+	if(form.name.value=="")
 	{
-		alert("Please input the risk name");
-		form.risks.focus();
+		alert("Please select a risk to delete");
+		form.name.focus();
 		return false;
 	}
+	
+	form.submit();
+}
+
+function check_mitigation(form)
+{
+	if(form.name.value=="")
+	{
+		alert("Please select a risk to enter mitigation");
+		form.name.focus();
+		return false;
+	}
+	if(form.plan.value=="")
+	{
+		alert("Please input a mitigation plan");
+		form.plan.focus();
+		return false;
+	}
+	form.submit();
+}
+
+function check_modify(form)
+{
+	if(form.name.value=="")
+	{
+		alert("Please select a risk to modify");
+		form.name.focus();
+		return false;
+	}
+	
+	if(form.newRiskName.value=="")
+	{
+		alert("Please input a new name for the risk; If you want to keep the same name, please re-enter the old name.");
+		form.newRiskName.focus();
+		return false;
+	}
+	
 	if(form.riskdesc.value=="")
 	{
 		alert("Please input the risk description");
@@ -141,7 +184,7 @@ function MM_validateForm() { //v4.0
     <h6>Project name:&nbsp</h6> <div class="box">
     <?php displayProjName() ?></div>
     
-    <form method="post" action="deleteRisk.php" name="setup_form" id="contactform">
+    <form method="post" action="deleteRisk.php" name="delete_risk_form" id="contactform">
       <div class="boxes">
     	 <div class="spacer"></div>
       	<h5>Select a risk to delete.</h5><br></br>
@@ -157,7 +200,7 @@ function MM_validateForm() { //v4.0
 			?>
         
         	<div class="submitbtn">
-            <input type="submit" name='Delete Risk' class="button btncolor" onclick="return check(setup_form);" value="Delete Risk" />
+            <input type="submit" name='Delete Risk' class="button btncolor" onclick="return check_deletion(delete_risk_form);" value="Delete Risk" />
         	</div>
         </div>
       </form>
@@ -169,7 +212,7 @@ function MM_validateForm() { //v4.0
         
         <h5>Update the mitigation plan for the selected risk.</h5><br></br>
         
-        <form method="post" action="updateMitigationPlan.php" name="setup_form" id="contactform">
+        <form method="post" action="updateMitigationPlan.php" name="mitigation_form" id="contactform">
       	<div>
        		<h6>Risk Item:&nbsp </h6>
         	<?php
@@ -184,7 +227,7 @@ function MM_validateForm() { //v4.0
         	</div>
        	 
         	<div class="submitbtn">
-            <input type="submit" name='Update Plan' class="button btncolor" onclick="return check(setup_form);" value="Update Plan" />
+            <input type="submit" name='Update Plan' class="button btncolor" onclick="return check_mitigation(mitigation_form);" value="Update Plan" />
         	</div>
         </div>
         </form>
@@ -202,6 +245,9 @@ function MM_validateForm() { //v4.0
 			?>
 			<br></br>
 			
+			<h6>New Risk Name:&nbsp </h6>
+			<input name="newRiskName" type="text"  class="input" id="newRiskName" title="Pw" value="" maxlength="2048"/></div>
+			
 			<h6>Risk Description:</h6>
        		 <div class="msgbox">
         	  <textarea name="riskdesc" class="message" id="cf_message" title="riskDescription" value="" rows="50" cols="30" maxlength="2048"></textarea>
@@ -209,7 +255,7 @@ function MM_validateForm() { //v4.0
         	</div>
        	 
         	<div class="submitbtn">
-            <input type="submit" name='Edit Risk' class="button btncolor" onclick="return check(update_description_form);" value="Edit Risk" />
+            <input type="submit" name='Edit Risk' class="button btncolor" onclick="return check_modify(update_description_form);" value="Edit Risk" />
         	</div>
         </div>
         

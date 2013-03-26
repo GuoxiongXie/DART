@@ -42,7 +42,7 @@ $rst1=$conn->Execute($sql1) or die($conn->errorMsg());
 if ($rst1 == false)
 {
 	echo "<script>alert('Sorry! Fail to add the risk! Please try again!');</script>";
-	echo "<script language='javascript'>window.location.href='addrisks.html';</script>";
+	echo "<script language='javascript'>window.location.href='addrisksFrontEnd.php';</script>";
 }
 else
 {

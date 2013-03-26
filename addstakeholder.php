@@ -14,7 +14,7 @@ if ($role == 'sm') {
 	if($rst==false) {
 		//echo "<script>alert('Fail');window.history.back(-1);</script>";
 		echo "<script language='javascript'>alert('Fail!');</script>";
-		echo "<script language='javascript'>window.location.href='addstakeholder.html';</script>";
+		echo "<script language='javascript'>window.location.href='addstakeholderFrontEnd.php';</script>";
 	}
 	
 	$sql = "insert into ProjMem(project, member) values ('$projname', '$username')";
@@ -22,7 +22,7 @@ if ($role == 'sm') {
 	if($rst==false) {
 		//echo "<script>alert('Fail');window.history.back(-1);</script>";
 		echo "<script language='javascript'>alert('Fail!');</script>";
-		echo "<script language='javascript'>window.location.href='addstakeholder.html';</script>";
+		echo "<script language='javascript'>window.location.href='addstakeholderFrontEnd.php';</script>";
 	}
 	echo "<script language='javascript'>alert('Success!');</script>";
 	echo "<script language='javascript'>window.location.href='setup.html';</script>";
@@ -33,7 +33,7 @@ else if ($role == 'sn') {
 	if($rst==false) {
 		//echo "<script>alert('Fail');window.history.back(-1);</script>";
 		echo "<script language='javascript'>alert('Fail!');</script>";
-		echo "<script language='javascript'>window.location.href='addstakeholder.html';</script>";
+		echo "<script language='javascript'>window.location.href='addstakeholderFrontEnd.php';</script>";
 	}
 	
 	$sql = "insert into ProjMem(project, member) values ('$projname', '$username')";
@@ -41,7 +41,7 @@ else if ($role == 'sn') {
 	if($rst==false) {
 		//echo "<script>alert('Fail');window.history.back(-1);</script>";
 		echo "<script language='javascript'>alert('Fail!');</script>";
-		echo "<script language='javascript'>window.location.href='addstakeholder.html';</script>";
+		echo "<script language='javascript'>window.location.href='addstakeholderFrontEnd.php';</script>";
 	}
 	echo "<script language='javascript'>alert('Success!');</script>";
 	echo "<script language='javascript'>window.location.href='setup.html';</script>";

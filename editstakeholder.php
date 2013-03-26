@@ -2,6 +2,14 @@
 session_start();
 include_once 'include/conn.php';
 
+//verify that only manager can access this feature
+$role = $_SESSION['authority'];
+if ($role != "manager"){
+	echo "<script language='javascript'>alert('Sorry but you have to be a manager to edit stakeholders.');</script>";
+	echo "<script language='javascript'>window.location.href='setup.html';</script>";
+}
+
+
 function nameSelect($str) {
 	global $conn;
 	$project = $_SESSION['project'];
@@ -19,6 +27,39 @@ function nameSelect($str) {
 	}
 }
 ?>
+
+<script language="javascript">
+/*Function:focus on the blank and alert the user to input the necessaries.
+*/
+function check_selection(form)
+{
+	if(form.name.value=="")
+	{
+		alert("Please select a stakeholder to delete!");
+		form.name.focus();
+		return false;
+	}
+	
+	form.submit();
+}
+
+function check(form)
+{
+	if(form.name.value=="")
+	{
+		alert("Please select a stakeholder to change info!");
+		form.name.focus();
+		return false;
+	}
+	if(form.pwd.value=="")
+	{
+		alert("Please input a new password for the stakeholder");
+		form.pwd.focus();
+		return false;
+	}
+	form.submit();
+}
+</script>
 
 <!doctype html>
 <html>
@@ -105,7 +146,7 @@ function MM_validateForm() { //v4.0
 <div id="contact">
 	<h5 style="margin-top:0px;">Edit Stakeholder</h5>
 	
-    <form method="post" action="deletestakeholder.php" name="setup_form" id="contactform">
+    <form method="post" action="deletestakeholder.php" name="delete_stakeholder_form" id="contactform">
 		<div class="boxes">
             
 			<h5>Select a stakeholder to delete.</h5><br></br>
@@ -117,13 +158,13 @@ function MM_validateForm() { //v4.0
 				?>
 
 				<div class="submitbtn">
-				<input type="submit" name='Delete Stakeholder' class="button btncolor" onclick="return check(setup_form);" value="Delete Stakeholder" />
+				<input type="submit" name='Delete Stakeholder' class="button btncolor" onclick="return check_selection(delete_stakeholder_form);" value="Delete Stakeholder" />
 				</div>
 			</div>
 		</div>
 	</form>
 	
-	<form method="post" action="editstakeholderinfo.php" name="setup_form" id="contactform">
+	<form method="post" action="editstakeholderinfo.php" name="edit_stakeholder_form" id="contactform">
         <div class="spacer">
 		
 			<h5>Change stakeholder info below.</h5><br></br>
@@ -136,10 +177,10 @@ function MM_validateForm() { //v4.0
 				<br></br>
 			
 				<h6>Password:&nbsp  </h6> <div class="box">
-				<input name="pwd" type="text"  class="input" id="sender_pw" title="Pw" value="" maxlength="2048"/></div>
+				<input name="pwd" type="password"  class="input" id="sender_pw" title="Pw" value="" maxlength="2048"/></div>
 
 				<div class="submitbtn">
-				<input type="submit" name='Edit Stakeholder' class="button btncolor" onclick="return check(setup_form);" value="Edit Stakeholder" />
+				<input type="submit" name='Edit Stakeholder' class="button btncolor" onclick="return check(edit_stakeholder_form);" value="Edit Stakeholder" />
 				</div>
 			</div>
 		</div>
