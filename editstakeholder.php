@@ -176,7 +176,7 @@ function MM_validateForm() { //v4.0
 				?>
 				<br></br>
 			
-				<h6>Password:&nbsp  </h6> <div class="box">
+				<h6>New Password:&nbsp  </h6> <div class="box">
 				<input name="pwd" type="password"  class="input" id="sender_pw" title="Pw" value="" maxlength="2048"/></div>
 
 				<div class="submitbtn">
