@@ -1,6 +1,6 @@
 <?php
-//This action happens after manager clicks on "close session" button.
-//note that this file is only for manager to close voting period.
+//This action happens after manager clicks on "close Voting Period" in the navigation bar on the left.
+//Note that this file is only for manager to close voting period.
 //The authority will be checked immediately.
 
 include_once 'include/conn.php';
@@ -17,7 +17,21 @@ $managerName = $_SESSION['username'];
 $sql = "SELECT * FROM ProjMem WHERE member='".$managerName."'";
 $rst = $conn->execute($sql);
 $projName = $rst->fields['project'];
+$today = date("Y-m-d");
+//two things can happen after pressing "close Voting Period" in the navigation bar on the left.
+//1. Last assessment date is not today, then allow the manager to close session.
+$getLastAssessmentDate = "SELECT * FROM Project WHERE projectname='$projName'";
+$getLastAssessmentDateRST = $conn->execute($getLastAssessmentDate);
+$curLastAssessmentDate = $getLastAssessmentDateRST->fields['lastAssessmentDate'];
+if (strcmp($curLastAssessmentDate, $today) != 0) {
+	
+}
 
+//2. Last assessment date is today, then display "A voting session has already been closed today".
+
+
+
+//the following is old stuff copied from other file.
 //-------update last assessment date-------------------
 $lastAssessmentDate = date("Y-m-d");
 $updateAssessDateSQL = "UPDATE Project SET lastAssessmentDate = '$lastAssessmentDate' WHERE projectname='$projName'";		//debug: check the type of closed. update the last assessment date and close the voting session
