@@ -151,7 +151,7 @@ function MM_validateForm() { //v4.0
   </div>
   <!--END of contact section-->
   
-  <div id="contact" style="float:left;">
+  <div id="contact" style="float:left;text-align:center;">
   	<h5 style="margin-top:0px;">Existed Risks</h5>
   	<?php
   		$managerName = $_SESSION['username'];	//get the name of manager, this managerName can actually be username too
@@ -167,6 +167,7 @@ function MM_validateForm() { //v4.0
 		}
 
   	?>
+  	<div class="spacer"></div>
   </div>
   <div style="clear:both;"></div>
   

@@ -18,66 +18,21 @@ $sql = "SELECT * FROM ProjMem WHERE member='".$managerName."'";
 $rst = $conn->execute($sql);
 $projName = $rst->fields['project'];
 $today = date("Y-m-d");
-//two things can happen after pressing "close Voting Period" in the navigation bar on the left.
-//1. Last assessment date is not today, then allow the manager to close session.
+
+//get the current last assessment date. Debug: This session of code probably include in html on next page to get the date to be displayed (should also include some code from above).
 $getLastAssessmentDate = "SELECT * FROM Project WHERE projectname='$projName'";
 $getLastAssessmentDateRST = $conn->execute($getLastAssessmentDate);
 $curLastAssessmentDate = $getLastAssessmentDateRST->fields['lastAssessmentDate'];
-if (strcmp($curLastAssessmentDate, $today) != 0) {
-	
-}
 
+//two things can happen after pressing "close Voting Period" in the navigation bar on the left.
+//1. Last assessment date is not today, then allow the manager to close session.
+if (strcmp($curLastAssessmentDate, $today) != 0) {	//not the same day
+	echo "<script language='javascript'>window.location.href='closeVotingPeriodPage.php';</script>"; //debug: make sure the name is correct. could have used render
+}
 //2. Last assessment date is today, then display "A voting session has already been closed today".
-
-
-
-//the following is old stuff copied from other file.
-//-------update last assessment date-------------------
-$lastAssessmentDate = date("Y-m-d");
-$updateAssessDateSQL = "UPDATE Project SET lastAssessmentDate = '$lastAssessmentDate' WHERE projectname='$projName'";		//debug: check the type of closed. update the last assessment date and close the voting session
-$updateAssessDateRST = $conn->execute($updateAssessDateSQL);
-
-//-------UPDATE the info in ProjRiskDesc, do calculations here-----------
-$sql1 = "select * from ProjRiskDesc";	//get all the rows in ProjRiskDesc, where (projName, riskName) is unique.
-$rst1 = $conn->execute($sql1);
-
-while (!$rst1->EOF) {	//for every row in ProjRiskDesc
-	$projName = $rst1->fields['projName'];
-	$riskName = $rst1->fields['riskName'];
-	
-	//copy lastRE to lastButOneRE
-	$lastRE = $rst1->fields['lastRE'];
-	$updateLastButOneRE = "UPDATE ProjRiskDesc SET lastButOneRE = '$lastRE' WHERE projName='$projName' AND riskName='$riskName'";	//copy lastRE to lastButOneRE
-	$updateLastButOneRERST = $conn->execute($updateLastButOneRE);
-	
-	//for each (projName, riskName), look up in IndividualVote, then do calculation.
-	$sql2 = "SELECT * FROM IndividualVote WHERE projName='$projName' AND riskName='$riskName'";
-	$rst2 = $conn->execute($sql2); //this returns multiple rows, each row is for one stakeholder with specific (projName, riskName)
-	$counter = 0; //this counts the number of users for a particular (projName, riskName) in IndividualVote
-	$PUOsum = 0;
-	$LUOsum = 0;
-	$lastREsum = 0;
-	
-	while (!$rst2->EOF){	//for every row in IndividualVote with particular (projName, riskName)
-		$PUO = $rst2->fields['PUO'];
-		$LUO = $rst2->fields['LUO'];
-		
-		$PUOsum = $PUOsum + $PUO;
-		$LUOsum = $LUOsum + $LUO;
-		$lastREsum = $lastREsum + $PUO * $LUO;
-		
-		$counter = $counter + 1;
-		$rst2->movenext();
-	}
-	
-	$averagePUO = $PUOsum / $counter;
-	$averageLUO = $LUOsum / $counter;
-	$averageLastRE = $lastREsum / $counter;
-	
-	$sql3 = "UPDATE ProjRiskDesc SET lastRE='$averageLastRE', averagePUO='$averagePUO', averageLUO='$averageLUO' WHERE projName='$projName' AND riskName='$riskName'";
-	$updateProjRiskDesc = $conn->execute($sql3);	//update for a particular (projName, riskName) in ProjRiskDesc
-	
-	$rst1->movenext();	//move on to the next (projName, riskName) in ProjRiskDesc
+else {	//the same day
+	echo "<script language='javascript'>window.location.href='votesHaveBeenClosedPage.php';</script>"; //debug: make sure the name is correct. could have used render
 }
+
 
 ?>
