@@ -151,6 +151,23 @@ function MM_validateForm() { //v4.0
   </div>
   <!--END of contact section-->
   
+  <div id="contact">
+  	<h5 style="margin-top:0px;">Existed Risks</h5>
+  	<?php
+  		$managerName = $_SESSION['username'];	//get the name of manager, this managerName can actually be username too
+		$findProjQuery = "SELECT project FROM ProjMem WHERE member='".$managerName."'";
+		$strangeProjName = $conn->Execute($findProjQuery) or die($conn->errrorMsg()); //debug: the output is actually "project sth".
+		$projName = trim(substr($strangeProjName, 8)); //get the actual input name, trim removes all the whitespaces in the front and at the end
+		$findRiskQuery = "SELECT riskName FROM ProjRiskDesc WHERE projName='".$projName."'";
+		$rst = $conn->Execute($findRiskQuery) or die($conn->errrorMsg());
+		while (!$rst->EOF) {
+			echo $rst->fields['riskName'];
+			echo "<br>";
+			$rst->movenext();
+		}
+
+  	?>
+  
   
 </div>
 <!--END of content-->
