@@ -109,13 +109,13 @@ function MM_validateForm() { //v4.0
 </div>
 <!--END of menu-->
 <!--This is the START of the content-->
-<div id="content">
+<div id="content" style="width:1200px">
   
   
   
   
   <!--This is the START of the contact section-->
-  <div id="contact">
+  <div id="contact" style="float:left;">
     <h5 style="margin-top:0px;">Add Risks</h5>
    
     <form method="post" action="addRisks.php" name="add_risks_form" id="contactform">
@@ -142,7 +142,7 @@ function MM_validateForm() { //v4.0
         
         <div class="spacer"></div>
         
-
+	</div>
     </form>
     	
         
@@ -151,7 +151,7 @@ function MM_validateForm() { //v4.0
   </div>
   <!--END of contact section-->
   
-  <div id="contact">
+  <div id="contact" style="float:left;">
   	<h5 style="margin-top:0px;">Existed Risks</h5>
   	<?php
   		$managerName = $_SESSION['username'];	//get the name of manager, this managerName can actually be username too
@@ -163,9 +163,12 @@ function MM_validateForm() { //v4.0
 		while (!$rst->EOF) {
 			echo $rst->fields['riskName'];
 			echo "<br>";
+			$rst->movenext();
 		}
 
   	?>
+  </div>
+  <div style="clear:both;"></div>
   
   
 </div>
