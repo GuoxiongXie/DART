@@ -11,12 +11,12 @@ session_start();
 
 $role = $_SESSION['authority']; //manager, admin, user; here it only can be manager
 
-if ($role != "manager"){
-	echo "<script>alert('Sorry, but you have to be one of the project managers to add a risk item!');</script>";
+if ($role != "manager" || $role != "user"){
+	echo "<script>alert('Sorry, but you have to be one of the project managers or regular users to add a risk item!');</script>";
 	echo "<script language='javascript'>window.location.href='setup.html';</script>";	//debug: go where??
 }
 
-$managerName = $_SESSION['username'];	//get the name of manager
+$managerName = $_SESSION['username'];	//get the name of manager, this managerName can actually be username too
 //$sql = "select * from RegularUser where name='".$username."' and pwd='".$pwdmd5."'";
 $findProjQuery = "SELECT project FROM ProjMem WHERE member='".$managerName."'";
 $strangeProjName = $conn->Execute($findProjQuery) or die($conn->errrorMsg()); //debug: the output is actually "project sth".
