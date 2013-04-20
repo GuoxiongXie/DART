@@ -1,6 +1,6 @@
 <?php
 //This action happens after manager or regular users clicks on "Risk Assessment" in the navigation bar on the left.
-//This file can be integrated 
+//This file can be integrated with html to generate ballot table! (maybe this file is included in html file??)
 //The authority will be checked immediately.
 
 include_once 'include/conn.php';
@@ -8,62 +8,48 @@ session_start();
 
 $role = $_SESSION['authority']; //manager, admin, user; here it only can be manager
 
-if ($role != "manager"){
-	echo "<script>alert('Sorry, but you have to be one of the project managers to close a voting period!');</script>";
-	echo "<script language='javascript'>window.location.href='setup.html';</script>";	//debug: go where??
+if ($role != "manager" && $role != "user"){
+	echo "<script>alert('Sorry, but you have to be one of the project managers or regular users to vote!');</script>";
+	echo "<script language='javascript'>window.location.href='setup.html';</script>";	//debug: go where?? This one should be for TA's
 }
 
-$managerName = $_SESSION['username'];
-$sql = "SELECT * FROM ProjMem WHERE member='".$managerName."'";
+$username = $_SESSION['username'];
+$sql = "SELECT * FROM ProjMem WHERE member='".$username."'";
 $rst = $conn->execute($sql);
 $projName = $rst->fields['project'];
 
-//-------update last assessment date-------------------
-$lastAssessmentDate = date("Y-m-d");
-$updateAssessDateSQL = "UPDATE Project SET lastAssessmentDate = '$lastAssessmentDate' WHERE projectname='$projName'";		//debug: check the type of closed. update the last assessment date and close the voting session
-$updateAssessDateRST = $conn->execute($updateAssessDateSQL);
-
-//-------UPDATE the info in ProjRiskDesc, do calculations here-----------
-$sql1 = "select * from ProjRiskDesc";	//get all the rows in ProjRiskDesc, where (projName, riskName) is unique.
+//lookup (projName, riskName) in ProjRiskDesc
+$sql1 = "SELECT * FROM ProjRiskDesc WHERE projName='".$projName."'";	//this returns many rows since many risks
 $rst1 = $conn->execute($sql1);
 
 while (!$rst1->EOF) {	//for every row in ProjRiskDesc
-	$projName = $rst1->fields['projName'];
+	//$projName = $rst1->fields['projName'];
 	$riskName = $rst1->fields['riskName'];
 	
-	//copy lastRE to lastButOneRE
-	$lastRE = $rst1->fields['lastRE'];
-	$updateLastButOneRE = "UPDATE ProjRiskDesc SET lastButOneRE = '$lastRE' WHERE projName='$projName' AND riskName='$riskName'";	//copy lastRE to lastButOneRE
-	$updateLastButOneRERST = $conn->execute($updateLastButOneRE);
+	//look up member in ProjMem for the project
+	$sql2 = "SELECT * FROM ProjMem WHERE project='$projName'";	//this returns many rows due to many members in a proj
+	$rst2 = $conn->execute($sql2);
 	
-	//for each (projName, riskName), look up in IndividualVote, then do calculation.
-	$sql2 = "SELECT * FROM IndividualVote WHERE projName='$projName' AND riskName='$riskName'";
-	$rst2 = $conn->execute($sql2); //this returns multiple rows, each row is for one stakeholder with specific (projName, riskName)
-	$counter = 0; //this counts the number of users for a particular (projName, riskName) in IndividualVote
-	$PUOsum = 0;
-	$LUOsum = 0;
-	$lastREsum = 0;
-	
-	while (!$rst2->EOF){	//for every row in IndividualVote with particular (projName, riskName)
-		$PUO = $rst2->fields['PUO'];
-		$LUO = $rst2->fields['LUO'];
+	while (!$rst2->EOF){	//for every row in ProjMem with particular projName
+		$member = $rst2->fields['member'];
 		
-		$PUOsum = $PUOsum + $PUO;
-		$LUOsum = $LUOsum + $LUO;
-		$lastREsum = $lastREsum + $PUO * $LUO;
+		//look up (projName, riskName, username) in IndividualVote, if no match, then insert it; if matched, do nothing.
+		$sql3 = "SELECT * FROM IndividualVote WHERE projName='$projName' AND riskName='$riskName' AND userName='$member'";
+		$rst3 = $conn->execute($sql3);
 		
-		$counter = $counter + 1;
+		if ($rst3->RecordCount() == 0){	//no matched, insert it
+			$sql4 = "insert into IndividualVote (projName, riskName, userName) values ('$projName', '$riskName', '$member')";
+			$rst4 = $conn->execute($sql4);
+		}
+		
+		//do nothing if matched.
+		
 		$rst2->movenext();
 	}
 	
-	$averagePUO = $PUOsum / $counter;
-	$averageLUO = $LUOsum / $counter;
-	$averageLastRE = $lastREsum / $counter;
-	
-	$sql3 = "UPDATE ProjRiskDesc SET lastRE='$averageLastRE', averagePUO='$averagePUO', averageLUO='$averageLUO' WHERE projName='$projName' AND riskName='$riskName'";
-	$updateProjRiskDesc = $conn->execute($sql3);	//update for a particular (projName, riskName) in ProjRiskDesc
 	
 	$rst1->movenext();	//move on to the next (projName, riskName) in ProjRiskDesc
 }
+
 
 ?>
