@@ -5,8 +5,8 @@ include_once 'include/conn.php';
 //verify that only manager can access this feature
 
 $role = $_SESSION['authority'];
-if ($role != "manager"){
-	echo "<script language='javascript'>alert('Sorry but you have to be a manager to add a risk.');</script>";
+if ($role != "manager" && $role != "user"){
+	echo "<script language='javascript'>alert('Sorry but you have to be a manager or a regular user to add a risk.');</script>";
 	echo "<script language='javascript'>window.location.href='setup.html';</script>";
 }
 ?>

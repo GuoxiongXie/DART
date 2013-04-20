@@ -1,18 +1,15 @@
 <?php
-//note that this file is only for manager to add new risk items; other people can't do this.
-//The authority will be check immediately.
-
+//This action happens after manager clicks on "close session" button.
+//note that this file is only for manager to close voting period.
+//The authority will be checked immediately.
 
 include_once 'include/conn.php';
-//session_save_path('/Applications/XAMPP/htdocs/dartSession');	//this is the path to save session variables
 session_start();
-/*process the login request and store the necessary information
-*/
 
 $role = $_SESSION['authority']; //manager, admin, user; here it only can be manager
 
-if ($role != "manager" && $role != "user"){
-	echo "<script>alert('Sorry, but you have to be one of the project managers or regular users to add a risk item!');</script>";
+if ($role != "manager"){
+	echo "<script>alert('Sorry, but you have to be one of the project managers to close a voting period!');</script>";
 	echo "<script language='javascript'>window.location.href='setup.html';</script>";	//debug: go where??
 }
 
@@ -30,25 +27,5 @@ $riskDesc = $_POST['riskDesc'];	//debug: make sure this names are correct in the
 $sql1 = "insert into ProjRiskDesc (projName, riskName, riskDesc) values ('$projName', '$riskName', '$riskDesc')";
 $rst1=$conn->Execute($sql1) or die($conn->errorMsg());
 
-//debug: todo: for sprint 3, also insert records in Vote table here.
-
-
-
-
-
-
-// end of todo
-
-if ($rst1 == false)
-{
-	echo "<script>alert('Sorry! Fail to add the risk! Please try again!');</script>";
-	echo "<script language='javascript'>window.location.href='addrisksFrontEnd.php';</script>";
-}
-else
-{
-	echo "<script>alert('A New Risk Item Has Been Added!');</script>";
-	//added the following line for Sprint I demo
-	echo "<script language='javascript'>window.location.href='setup.html';</script>"; //debug:where should I direct this to?
-}
 
 ?>
