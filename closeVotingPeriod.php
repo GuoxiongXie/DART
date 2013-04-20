@@ -15,17 +15,56 @@ if ($role != "manager"){
 
 $managerName = $_SESSION['username'];	//get the name of manager, this managerName can actually be username too
 //$sql = "select * from RegularUser where name='".$username."' and pwd='".$pwdmd5."'";
-$findProjQuery = "SELECT project FROM ProjMem WHERE member='".$managerName."'";
-$strangeProjName = $conn->Execute($findProjQuery) or die($conn->errrorMsg()); //debug: the output is actually "project sth".
-$projName = trim(substr($strangeProjName, 8)); //get the actual input name, trim removes all the whitespaces in the front and at the end
+$sql = "SELECT * FROM ProjMem WHERE member='".$managerName."'";
+$rst = $conn->execute($sql);
+$projName = $rst->fields['project'];
 
+//-------update last assessment date-------------------
+$lastAssessmentDate = date("Y-m-d");
+$updateAssessDateSQL = "UPDATE Project SET lastAssessmentDate = '$lastAssessmentDate' WHERE projectname='$projName'";		//debug: check the type of closed. update the last assessment date and close the voting session
+$updateAssessDateRST = $conn->execute($updateAssessDateSQL);
 
-$riskName = $_POST['riskName'];	//debug: make sure this names are correct in the front end form
-$riskDesc = $_POST['riskDesc'];	//debug: make sure this names are correct in the front end form
+//-------UPDATE the info in ProjRiskDesc, do calculations here-----------
+$sql1 = "select * from ProjRiskDesc";	//get all the rows in ProjRiskDesc, where (projName, riskName) is unique.
+$rst1 = $conn->execute($sql1);
 
-//insert a new risk to table ProjRiskDesc
-$sql1 = "insert into ProjRiskDesc (projName, riskName, riskDesc) values ('$projName', '$riskName', '$riskDesc')";
-$rst1=$conn->Execute($sql1) or die($conn->errorMsg());
-
+while (!$rst1->EOF) {	//for every row in ProjRiskDesc
+	$projName = $rst1->fields['projName'];
+	$riskName = $rst1->fields['riskName'];
+	
+	//copy lastRE to lastButOneRE
+	$lastRE = $rst1->fields['lastRE'];
+	$updateLastButOneRE = "UPDATE ProjRiskDesc SET lastButOneRE = '$lastRE' WHERE projName='$projName' AND riskName='$riskName'";	//copy lastRE to lastButOneRE
+	$updateLastButOneRERST = $conn->execute($updateLastButOneRE);
+	
+	//for each (projName, riskName), look up in IndividualVote, then do calculation.
+	$sql2 = "SELECT * FROM IndividualVote WHERE projName='$projName' AND riskName='$riskName'";
+	$rst2 = $conn->execute($sql2); //this returns multiple rows, each row is for one stakeholder with specific (projName, riskName)
+	$counter = 0; //this counts the number of users for a particular (projName, riskName) in IndividualVote
+	$PUOsum = 0;
+	$LUOsum = 0;
+	$lastREsum = 0;
+	
+	while (!$rst2->EOF){	//for every row in IndividualVote with particular (projName, riskName)
+		$PUO = $rst2->fields['PUO'];
+		$LUO = $rst2->fields['LUO'];
+		
+		$PUOsum = $PUOsum + $PUO;
+		$LUOsum = $LUOsum + $LUO;
+		$lastREsum = $lastREsum + $PUO * $LUO;
+		
+		$counter = $counter + 1;
+		$rst2->movenext();
+	}
+	
+	$averagePUO = $PUOsum / $counter;
+	$averageLUO = $LUOsum / $counter;
+	$averageLastRE = $lastREsum / $counter;
+	
+	$sql3 = "UPDATE ProjRiskDesc SET lastRE='$averageLastRE', averagePUO='$averagePUO', averageLUO='$averageLUO' WHERE projName='$projName' AND riskName='$riskName'";
+	$updateProjRiskDesc = $conn->execute($sql3);	//update for a particular (projName, riskName) in ProjRiskDesc
+	
+	$rst1->movenext();	//move on to the next (projName, riskName) in ProjRiskDesc
+}
 
 ?>

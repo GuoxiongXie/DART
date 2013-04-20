@@ -31,7 +31,7 @@ function riskSelect() {
 	echo "<select name=\"name\" size=\"2\">";
 	while (!$rst->EOF) {
 		echo "<option value=\"".$rst->fields['riskName']."\">".$rst->fields['riskName']."</option>";
-		$rst->movenext();
+		$rst->movenext();	//move down to next row in table
 	}
 	echo "</select>";
 }
