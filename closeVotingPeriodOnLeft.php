@@ -27,11 +27,11 @@ $curLastAssessmentDate = $getLastAssessmentDateRST->fields['lastAssessmentDate']
 //two things can happen after pressing "close Voting Period" in the navigation bar on the left.
 //1. Last assessment date is not today, then allow the manager to close session.
 if (strcmp($curLastAssessmentDate, $today) != 0) {	//not the same day
-	echo "<script language='javascript'>window.location.href='closeVotingPeriodPage.php';</script>"; //debug: make sure the name is correct. could have used render
+	header("location:closeVotingPeriodPage.php");	//debug: make sure the name is correct
 }
 //2. Last assessment date is today, then display "A voting session has already been closed today".
 else {	//the same day
-	echo "<script language='javascript'>window.location.href='votesHaveBeenClosedPage.php';</script>"; //debug: make sure the name is correct. could have used render
+	header("location:votesHaveBeenClosedPage.php");	//debug: make sure the name is correct.
 }
 
 
