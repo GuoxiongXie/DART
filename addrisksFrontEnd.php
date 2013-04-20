@@ -109,7 +109,7 @@ function MM_validateForm() { //v4.0
 </div>
 <!--END of menu-->
 <!--This is the START of the content-->
-<div id="content" style="width:900px">
+<div id="content" style="width:1200px">
   
   
   
@@ -142,7 +142,7 @@ function MM_validateForm() { //v4.0
         
         <div class="spacer"></div>
         
-
+	</div>
     </form>
     	
         
@@ -151,7 +151,7 @@ function MM_validateForm() { //v4.0
   </div>
   <!--END of contact section-->
   
-  <div id="contact" style="float:left;">
+  <div id="contact" style="float:left;text-align:center;">
   	<h5 style="margin-top:0px;">Existed Risks</h5>
   	<?php
   		$managerName = $_SESSION['username'];	//get the name of manager, this managerName can actually be username too
@@ -167,6 +167,7 @@ function MM_validateForm() { //v4.0
 		}
 
   	?>
+  	<div class="spacer"></div>
   </div>
   <div style="clear:both;"></div>
   
