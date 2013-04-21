@@ -52,4 +52,36 @@ while (!$rst1->EOF) {	//for every row in ProjRiskDesc
 }
 
 
+//The following function generates the Risk Assessment Ballot
+function generateBallot() {
+	global $conn;
+	global $projName;	//$projName is the proj being voted on
+	global $username;	//$username is who is voting
+	
+	$getRiskSQL = "SELECT * FROM ProjRiskDesc WHERE projName='".$projName."'";	//this returns many rows since many risks
+	$getRiskRST = $conn->execute($getRiskSQL);
+	
+	$number = 1;	//used as the leftmost column in table
+	while (!$getRiskRST->EOF) {	//for every row in ProjRiskDesc
+		$riskItem = $getRiskRST->fields['riskName'];	
+		
+		//echo table here!!! Give each field a proper "name" to identify 
+		//see http://www.phpsuperblog.com/php/create-a-html-form-with-php-for-loop-and-table/
+		
+		
+		
+		$number = $number + 1;
+		$getRiskRST->movenext();	//move on to the next (projName, riskName) in ProjRiskDesc
+	}
+	
+	//****this is an example for generating selection, remove below******
+	echo "<select name=\"name\" size=\"2\">";
+	while (!$rst->EOF) {
+		echo "<option value=\"".$rst->fields['riskName']."\">".$rst->fields['riskName']."</option>";
+		$rst->movenext();	//move down to next row in table
+	}
+	echo "</select>";
+	//****this is an example for generating selection, remove above******
+}
+
 ?>
