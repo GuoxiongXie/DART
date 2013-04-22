@@ -51,38 +51,9 @@ while (!$rst1->EOF) {	//for every row in ProjRiskDesc
 	$rst1->movenext();	//move on to the next (projName, riskName) in ProjRiskDesc
 }
 
-
-//The following function generates the Risk Assessment Ballot
-function generateBallot() {
-	global $conn;
-	global $projName;	//$projName is the proj being voted on
-	global $username;	//$username is who is voting
-	
-	$getRiskSQL = "SELECT * FROM ProjRiskDesc WHERE projName='".$projName."'";	//this returns many rows since many risks
-	$getRiskRST = $conn->execute($getRiskSQL);
-	
-	$number = 1;	//used as the leftmost column in table
-	while (!$getRiskRST->EOF) {	//for every row in ProjRiskDesc
-		$riskItem = $getRiskRST->fields['riskName'];
-		
-		//echo table here!!! Give each field a proper "name" to identify 
-		//see http://www.phpsuperblog.com/php/create-a-html-form-with-php-for-loop-and-table/
-		
-		
-		
-		$number = $number + 1;
-		$getRiskRST->movenext();	//move on to the next (projName, riskName) in ProjRiskDesc
-	}
-	
-	//****this is an example for generating selection, remove below******
-	echo "<select name=\"name\" size=\"2\">";
-	while (!$rst->EOF) {
-		echo "<option value=\"".$rst->fields['riskName']."\">".$rst->fields['riskName']."</option>";
-		$rst->movenext();	//move down to next row in table
-	}
-	echo "</select>";
-	//****this is an example for generating selection, remove above******
-}
+$getRiskSQL = "SELECT * FROM ProjRiskDesc WHERE projName='".$projName."'";	//this returns many rows since many risks
+$getRiskRST = $conn->execute($getRiskSQL);
+$numberofrow = $getRiskRST->RecordCount();
 
 ?>
 
@@ -175,11 +146,11 @@ function MM_validateForm() { //v4.0
 	<h5 style="color: #660000"><?php echo $projName; ?></h5>
 	<br/>
           
-<?php
-echo "<form method=\"post\" action=\"saveVotes.php\" name=\"voting_form\" id=\"voting_form\">
+
+<form method="post" action="saveVotes.php" name="voting_form" id="voting_form">
 <div>
 	<table>
-		<thead>
+ 		<thead>
 			<th>ID</th>
 			<th>Risk Item</th>
 			<th>P(UO)</th>
@@ -188,24 +159,30 @@ echo "<form method=\"post\" action=\"saveVotes.php\" name=\"voting_form\" id=\"v
 			<th>Other People</th>
 		</thead>
 		<tbody>
-			<tr>
-				<td>1</td>
-				<td>Unrealistic time and cost estimates </td>
-				<td><input style=\"width:25px\" name=\"pvalue\" type=\"text\" class=\"input\" id=\"sender_name\" title=\"riskname\" value=\"0\" maxlength=\"2\"/></td>
-				<td><input style=\"width:25px\" name=\"lvalue\" type=\"text\" class=\"input\" id=\"sender_name\" title=\"riskname\" value=\"0\" maxlength=\"2\"/></td>
-				<td><input name=\"rationale\" type=\"text\" class=\"input\" id=\"sender_name\" title=\"riskname\" value=\"\" maxlength=\"100\"/></td>
-				<td><a href=\"RiskAssessment_detail.php\">+</a></td>
-			</tr>
+			<?php for($counter = 1;$counter<=$numberofrow;$counter++){ ?>
+			
+			  <tr>
+				<?php $riskName = $getRiskRST->fields['riskName']; ?>
+				<td><?php echo $counter; ?></td>
+				<td><?php echo $riskName; ?></td>
+				
+				<td><input style="width:25px" name="pvalue<?php echo $riskName;?>" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
+				<td><input style="width:25px" name="lvalue<?php echo $riskName;?>" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
+				<td><input name="rationale<?php echo $riskName;?>" type="text" class="input" id="sender_name" title="riskname" value="" maxlength="100"/></td>
+				<td><a href="RiskAssessment_detail.php" name="detail<?php echo $riskName;?>">+</a></td>
+			  </tr>
+			
+			  <?php $getRiskRST->movenext(); ?>
+			<?php }?>
 		</tbody>
 	</table>
 </div>
   
 	<br/>
-	<div class=\"submitbtn\">
-		<input type=\"submit\" name='Save Votes' class=\"styled-button\" onclick=\"return check(voting_form);\" value=\"Save Votes\" />
+	<div class="submitbtn">
+		<input type="submit" name='Save Votes' class="styled-button" onclick="return check(voting_form);" value="Save Votes" />
     </div>  
-</form>";  
-?>
+</form>
   
   
   
