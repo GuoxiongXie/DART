@@ -15,9 +15,6 @@ $sql1 = "SELECT * FROM Project WHERE projectname='".$projName."'";
 $rst1 = $conn->execute($sql1);
 $lastAssessmentDate = $rst1->fields['lastAssessmentDate'];
 
-//get the riskName from table then "Update IndividualVote ...where projName=$projName AND riskName=$riskName AND userName=$userName"
-
-
 ?>
 
 <!doctype html>

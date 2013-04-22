@@ -96,7 +96,7 @@ function MM_validateForm() { //v4.0
 			<th>P(UO)</th>
 			<th>L(UO)</th>
 			<th>Rationale</th>
-			<th>...</th>
+			<th>Other People</th>
 		</thead>
 		<tbody>
 			<tr>
@@ -105,7 +105,7 @@ function MM_validateForm() { //v4.0
 				<td><input style="width:25px" name="pvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
 				<td><input style="width:25px" name="lvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
 				<td><input name="rationale" type="text" class="input" id="sender_name" title="riskname" value="" maxlength="100"/></td>
-				<td><a href="RiskAssessment_detail.html">+</a></td>
+				<td><a href="RiskAssessment.php">+</a></td>
 			</tr>
 			<tr>
 				<td>2</td>
@@ -113,7 +113,7 @@ function MM_validateForm() { //v4.0
 				<td><input style="width:25px" name="pvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
 				<td><input style="width:25px" name="lvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
 				<td><input name="rationale" type="text" class="input" id="sender_name" title="riskname" value="" maxlength="100"/></td>
-				<td><a href="RiskAssessment_detail.html">+</a></td>
+				<td><a href="RiskAssessment.php">+</a></td>
 			</tr>
 			<tr>
 				<td>3</td>
@@ -121,7 +121,7 @@ function MM_validateForm() { //v4.0
 				<td><input style="width:25px" name="pvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
 				<td><input style="width:25px" name="lvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
 				<td><input name="rationale" type="text" class="input" id="sender_name" title="riskname" value="" maxlength="100"/></td>
-				<td><a href="RiskAssessment_detail.html">+</a></td>
+				<td><a href="RiskAssessment.php">+</a></td>
 			</tr>
 		</tbody>
 	</table>
