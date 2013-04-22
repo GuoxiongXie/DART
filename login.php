@@ -29,7 +29,7 @@ if($role == "manager") {
 		$_SESSION['project'] = $projName->fields['project'];
 		
 		
-		header("location:setup.html");		//debug: setup is the main page
+		header("location:Manager_setup.html");		//debug: setup is the main page
 	}
 	else
 	{
@@ -53,7 +53,7 @@ else {	//regular user login
 		//$_SESSION['project'] = $projName;	//this does not work in later pages. debug: this is the original.
 		$_SESSION['project'] = $projName->fields['project'];
         
-        header("location:setup.html");		//debug: regular user should not be able to set up projects!!!
+        header("location:user_setup.html");		//debug: regular user should not be able to set up projects!!!
 	}
 	else
 	{

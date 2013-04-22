@@ -15,7 +15,7 @@
 #login-box h2 {
 	padding:0;
 	margin:0;
-	color: #ebebeb;
+	color: #660000;
 	font: bold 44px "Calibri", Arial;
 }
 
@@ -41,10 +41,10 @@
 .form-login  {
 	width: 205px;
 	padding: 10px 4px 6px 3px;
-	border: 1px solid #0d2c52;
-	background-color:#1e4f8a;
+	border: 1px solid #660000;
+	background-color:#FFFFCC;
 	font-size: 16px;
-	color: #ebebeb;
+	color: #660000;
 }
 
 

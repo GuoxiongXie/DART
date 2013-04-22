@@ -56,14 +56,24 @@ while (!$rst1->EOF) {	//for every row in ProjRiskDesc
 		$rst2->movenext();
 	}
 	
-	$averagePUO = $PUOsum / $counter;
-	$averageLUO = $LUOsum / $counter;
-	$averageLastRE = $lastREsum / $counter;
+	if ($counter != 0){
+		$averagePUO = $PUOsum / $counter;
+		$averageLUO = $LUOsum / $counter;
+		$averageLastRE = $lastREsum / $counter;
+	}
+	else {
+		$averagePUO = 0;
+		$averageLUO = 0;
+		$averageLastRE = 0;		
+	}
 	
 	$sql3 = "UPDATE ProjRiskDesc SET lastRE='$averageLastRE', averagePUO='$averagePUO', averageLUO='$averageLUO' WHERE projName='$projName' AND riskName='$riskName'";
 	$updateProjRiskDesc = $conn->execute($sql3);	//update for a particular (projName, riskName) in ProjRiskDesc
 	
 	$rst1->movenext();	//move on to the next (projName, riskName) in ProjRiskDesc
 }
+
+	echo "<script>alert('Voting session closed. Now you can click on View Results to see the voting result.');</script>";
+	echo "<script language='javascript'>window.location.href='about.html';</script>";	//debug: go where??
 
 ?>

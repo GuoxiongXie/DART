@@ -1,52 +1,10 @@
-<script language="javascript">
-/*Function:focus on the blank and alert the user to input the necessaries.
-*/
-function check(form)
-{
-	if(form.projectName.value=="")
-	{
-		alert("Please input the Project name");
-		form.projectName.focus();
-		return false;
-	}
-	if(form.projectDesc.value=="")
-	{
-		alert("Please input the Project description");
-		form.projectDesc.focus();
-		return false;
-	}
-	if(form.managerName.value=="")
-	{
-		alert("Please input the Project manager");
-		form.managerName.focus();
-		return false;
-	}
-	if(form.managerPassword.value=="")
-	{
-		alert("Please input the Manager password");
-		form.managerPassword.focus();
-		return false;	
-	}
-	if(form.confirmManPwd.value=="")
-	{
-		alert("Please confirm manager password");
-		form.confirmManPwd.focus();
-		return false;		
-	}
-	else if (form.confirmManPwd.value != form.managerPassword.value) {
-		alert("Manager password and Confirm manager password don't match!");
-		form.confirmManPwd.focus();
-		return false;
-	}
-	form.submit();
-}
-</script>
 
-<!DOCTYPE html>
+
+<!doctype html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>TA setup project</title>
+<title>Risk Assessment</title>
 <link rel="shortcut icon" href="favicon.ico" />
 <!-- Load CSS -->
 <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -95,8 +53,9 @@ function MM_validateForm() { //v4.0
 <div id="topcontrol" style="position: fixed; bottom: 5px; left: 960px; opacity: 1; cursor: pointer;" title="Go to Top"></div>
 <div id="header-wrapper">
   <div id="header">
+  	<div id="logo"><img src="images/usc.png" width="140" alt="logo" /></div>
     <div id="header-text">
-      <h4>DISTRIBUTED ASSESSMENT OF RISKS TOOL(DART)</h4>
+      <h3 style="font-family:Georgia, Times, serif; color: white">Distributed Assessment of Risks Tool(DART)</h3>
     </div>
   </div>
 </div>
@@ -116,57 +75,74 @@ function MM_validateForm() { //v4.0
 <!--END of menu-->
 <!--This is the START of the content-->
 <div id="content">
-  
-  
-  
-  
   <!--This is the START of the contact section-->
   <div id="contact">
-  	<h5 style="margin-top:0px;">Welcome! Please set up projects for your class!<br><br></h5>
-    <h5>Project Setup</h5>
-    <p>Enter updates to project information below</p>
-    <form method="post" action="adminSetUpProj.php" name="admin_setup_form" id="contactform">
-      <div class="boxes">
-        <h6>Project name:</h6><br></br>
-        <div class="box">
-          <input name="projectName" type="text" class="input" id="sender_name" title="Projname" value="" maxlength="2048"/></div>
+    <h5 style="margin-top:0px;">Risk Assessment Ballot</h5>
+    <p>&diams; For each risks item enter value(0 to abstain, 1=low to 10=highest) for the following:</p>
+    <p>P(UO)- Probability of Undesirable Outcome.</p>
+    <p>L(UO)- Size of Loss of Undesirable Outcome.</p>
+    <p>&diams; For each risk, you can see votes from project stakeholders by clicking +/-</p>
+    <p>&diams; Note that if you want to abstain from a risk item, enter 0 for both PUO and LUO.</p>
+	<br/>
+	<h5>Project Name:</h5>
+	<h5 style="color: #660000">Distributed Assessment of Risks Tool(DART)</h5>
+	<br/>
+          
 
-        <h6>Project description:</h6>
-        <div class="msgbox">
-          <textarea name="projectDesc" class="message" id="cf_message" title="Description" value="" rows="50" cols="30" maxlength="2048"></textarea>
-        <!--size="30"-->
-        </div>
-        
-        <h6>Project manager:</h6><br></br>
-        <div class="box">
-          <input name="managerName" type="text" class="input" id="sender_manager" title="Projmanager" value="" maxlength="2048"/></div>
-          
-        <h6>Manager Password:</h6><br></br>
-        <div class="box">
-          <input name="managerPassword" type="password" class="input" id="sender_pw" title="Managerpw" value="" maxlength="2048"/></div>
-          
-        <h6>Confirm Manager Password:</h6><br></br>
-        <div class="box">
-          <input name="confirmManPwd" type="password" class="input" id="sender_pw" title="Managerpw" value="" maxlength="2048"/></div>
-        
-        <div class="submitbtn">
-          <input type="submit" name='Update' class="button btncolor" onclick="return check(admin_setup_form);" value="Creat Project" />
-        </div>
-      </div>
-    </form>
+<div>
+	<table>
+		<thead>
+			<th>ID</th>
+			<th>Risk Item</th>
+			<th>P(UO)</th>
+			<th>L(UO)</th>
+			<th>Rationale</th>
+			<th>...</th>
+		</thead>
+		<tbody>
+			<tr>
+				<td>1</td>
+				<td>Unrealistic time and cost estimates </td>
+				<td><input style="width:25px" name="pvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
+				<td><input style="width:25px" name="lvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
+				<td><input name="rationale" type="text" class="input" id="sender_name" title="riskname" value="" maxlength="100"/></td>
+				<td><a href="RiskAssessment_detail.html">+</a></td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td>Developing the wrong software functions</td>
+				<td><input style="width:25px" name="pvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
+				<td><input style="width:25px" name="lvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
+				<td><input name="rationale" type="text" class="input" id="sender_name" title="riskname" value="" maxlength="100"/></td>
+				<td><a href="RiskAssessment_detail.html">+</a></td>
+			</tr>
+			<tr>
+				<td>3</td>
+				<td>Lack of top management commitment to the project </td>
+				<td><input style="width:25px" name="pvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
+				<td><input style="width:25px" name="lvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
+				<td><input name="rationale" type="text" class="input" id="sender_name" title="riskname" value="" maxlength="100"/></td>
+				<td><a href="RiskAssessment_detail.html">+</a></td>
+			</tr>
+		</tbody>
+	</table>
+</div>  
+<br/>
+	<div class="submitbtn">
+		<input type="submit" name='Save Votes' class="styled-button" onclick="return check(setup_form);" value="Save Votes" />
+    </div>  
+    
   </div>
-  <!--END of contact section-->
-  
-  
+  <!--END of contact section--> 
 </div>
 <!--END of content-->
 <p class="slide"><a href="#" class="btn-slide"></a></p>
 <div id="slide-panel">
 	<!--This is the START of the follow section-->
-	<div id="follow">
-		<a href="login.html">
+		<div id="follow">
+		<a href="adminSignUp.html">
 		<div id="follow-setup"><img src="images/setup.jpg" />
-			<h4>TA Signin</h4>
+			<h4>TA Signup</h4>
 		</div>
 		</a>
 		<a href="login.html">	
@@ -174,23 +150,13 @@ function MM_validateForm() { //v4.0
 			<h4>Login</h4>
 		</div>
 		</a>
-		
 		<form method="post" action="logout.php">
 		<div id="follow-mail"><input type="image" src="images/logout.png" alt="Submit" name='Logout' value='Logout' />
 		<!--<div id="follow-mail"><img src="images/logout.png" /> -->
 			<h4>Logout</h4>
 		</div>
 		</form>
-		
-		<!--
-		<a href="about.html">
-		<div id="follow-mail"><img src="images/logout.png" />
-			<h4>Logout</h4>
-		</div>
-		</a>
-		-->
-		
-		<h1>Thanks for visiting!</h1>
+		<h1>Thanks for that!</h1>
 	</div>
 	<!--END of follow section-->
 </div>

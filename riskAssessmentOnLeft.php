@@ -63,7 +63,7 @@ function generateBallot() {
 	
 	$number = 1;	//used as the leftmost column in table
 	while (!$getRiskRST->EOF) {	//for every row in ProjRiskDesc
-		$riskItem = $getRiskRST->fields['riskName'];	
+		$riskItem = $getRiskRST->fields['riskName'];
 		
 		//echo table here!!! Give each field a proper "name" to identify 
 		//see http://www.phpsuperblog.com/php/create-a-html-form-with-php-for-loop-and-table/

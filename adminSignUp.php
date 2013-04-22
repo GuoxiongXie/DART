@@ -46,7 +46,7 @@ else {
         $_SESSION['authority'] = "admin";	//store authority in session for later use
 		
 		echo "<script language='javascript'>alert('Registration Successful! Now you can set up new projects for the class!');</script>";
-		echo "<script language='javascript'>window.location.href='adminSetUpProj.html';</script>";	//signup successful, go to admin should set up proj
+		echo "<script language='javascript'>window.location.href='TA_setup.html';</script>";	//signup successful, go to admin should set up proj
 	}
 	else //can't insert new record, prompt the user try again
 	{

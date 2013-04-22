@@ -32,7 +32,7 @@ function check(form)
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Setup project</title>
+<title>Manager Setup project</title>
 <link rel="shortcut icon" href="favicon.ico" />
 <!-- Load CSS -->
 <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -81,8 +81,9 @@ function MM_validateForm() { //v4.0
 <div id="topcontrol" style="position: fixed; bottom: 5px; left: 960px; opacity: 1; cursor: pointer;" title="Go to Top"></div>
 <div id="header-wrapper">
   <div id="header">
+    <div id="logo"><img src="images/usc.png" width="140" alt="logo" /></div>
     <div id="header-text">
-      <h4>DISTRIBUTED ASSESSMENT OF RISKS TOOL(DART)</h4>
+      <h3 style="font-family:Georgia, Times, serif; color: white">Distributed Assessment of Risks Tool(DART)</h3>
     </div>
   </div>
 </div>
@@ -91,16 +92,13 @@ function MM_validateForm() { //v4.0
 <div id="menu-wrapper">
   <div id="main-menu">
     <ul>
-      <li><a href="about.html">About</a></li>
-      <li><a  class="selected" href="setup.html">Project →</a></li>
-      <li><a href="blog.html">Risk Assessment</a></li>
-      <li><a href="contact.html">Close Voting Period</a></li>
-      <li><a href="features.html">View Results</a></li>
+      <li><a class="selected" href="about.html">About</a></li>
+      <li><a href="jumpProject.php">Project</a></li>
+      <li><a href="jumpRiskAssessment.php">Risk Assessment</a></li>
+      <li><a href="jumpCloseVotingPeriod.php">Close Voting Period</a></li>
+      <li><a href="jumpViewResults.php">View Results</a></li>
     </ul>
   </div>
-	<!--This is the START of the footer-->
-
-	<!--END of footer-->
 </div>
 <!--END of menu-->
 <!--This is the START of the content-->
@@ -111,31 +109,58 @@ function MM_validateForm() { //v4.0
   
   <!--This is the START of the contact section-->
   <div id="contact">
-    <h5 style="margin-top:0px;">Project Setup</h5>
+  	
+  	<h5 style="margin-top:0px;">&diams; Project Setup</h5>
     <p>Enter updates to project information below</p>
     <?php displayProjInfo(); ?> <!--newly added: call the function to populate the variables -->
+    
     <form method="post" action="setup.php" name="setup_form" id="contactform">
-      <div class="boxes">
-        <h6>Project name:</h6><br></br>
-        <div class="box">
+      	<div class="boxes">
+        	<h5>Project name:</h5><br></br>
+        	<div class="box">
           <!--<input name="projectname" type="text" class="input" id="sender_name" title="Projname" value="" maxlength="2048"/></div>-->
-			<?php echo $projName; ?></div>
+				<?php echo $projName; ?>
+			</div>
 			
-        <h6>Project description:</h6>
-        <div class="msgbox">
-          <?php
-          echo '<textarea name="projectdesc" class="message" id="cf_message" title="Description" value="" rows="50" cols="30" maxlength="2048">'.$projDesc.'</textarea>';
-          ?>
+        	<h5>Project description:</h5>
+        	<div class="msgbox">
+         	 <?php
+          	echo '<textarea name="projectdesc" class="message" id="cf_message" title="Description" value="" rows="50" cols="30" maxlength="2048">'.$projDesc.'</textarea>';
+          	?>
         <!--size="30"-->
-        </div>
+        	</div>
         
-        <div class="submitbtn">
-          <input type="submit" name='Update' class="button btncolor" onclick="return check(setup_form);" value="Update" />
-        </div>
-      </div>
-    </form>
+        	<div class="submitbtn">
+          		<input type="submit" name='Update' class="styled-button" onclick="return check(setup_form);" value="Update" />
+        	</div>
+   	     </div> 
+   	</form> 
   </div>
-  <!--END of contact section-->
+    
+    
+    <div id="contactinfo" style="width:300px; margin-left: 2px">    
+        <h5>Stakeholder:</h5><br/>
+        <div>
+        	<table style="margin-left: 50px">
+				<thead>
+					<th>Role</th>
+					<th>Stakeholder Name</th>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Manager</td>
+						<td>Joe Smith</td>
+					</tr>
+					<tr>
+						<td>regular user</td>
+						<td>Fred White</td>
+					</tr>
+				</tbody>
+			</table>	
+		</div>
+    </div>
+
+    <!--END of contact section-->
   
   
 </div>
@@ -144,20 +169,23 @@ function MM_validateForm() { //v4.0
 <div id="slide-panel">
 	<!--This is the START of the follow section-->
 	<div id="follow">
-		<a href="login.html">
-		<div id="follow-twitter"><img src="images/login.png" />
+		<a href="adminSignUp.html">
+		<div id="follow-setup"><img src="images/setup.jpg" />
+			<h4>TA Signup</h4>
+		</div>
+		</a>
+		<a href="login.html">	
+		<div id="follow-login"><img src="images/login.png" />
 			<h4>Login</h4>
 		</div>
-		</a><<!--a href="about.html"> -->
-		
-		<form method="post" action="logout.php">
+		</a>
+	<form method="post" action="logout.php">
 		<div id="follow-mail"><input type="image" src="images/logout.png" alt="Submit" name='Logout' value='Logout' />
 		<!--<div id="follow-mail"><img src="images/logout.png" /> -->
 			<h4>Logout</h4>
 		</div>
 		</form>
-		
-		<h1>Thanks for Visiting!</h1>
+		<h1>Thanks for that!</h1>
 	</div>
 	<!--END of follow section-->
 </div>

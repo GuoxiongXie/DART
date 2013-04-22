@@ -1,71 +1,31 @@
 <?php
 session_start();
-include_once 'include/conn.php';
+include_once "include/conn.php";
 
-//verify that only manager can access this feature
 $role = $_SESSION['authority'];
-if ($role != "manager"){
-	echo "<script language='javascript'>alert('Sorry but you have to be a manager to edit stakeholders.');</script>";
-	echo "<script language='javascript'>window.location.href='setup.html';</script>";
+$username = $_SESSION['username'];
+
+if ($role != "admin") {
+	$projectName = $_SESSION['project'];
+	$projInfoQuery = "SELECT * FROM Project WHERE projectname='".$projectName."'";
+	$rst = $conn->Execute($projInfoQuery) or die($conn->errorMsg());
+	$lastAssessment = $rst->fields['lastAssessmentDate'];
+	$closed = $rst->fields['closed'];
 }
 
-
-function nameSelect($str) {
-	global $conn;
-	$project = $_SESSION['project'];
-	
-	if($str == "regular") {
-		$sql = "select * from RegularUser, ProjMem where RegularUser.name = ProjMem.member and ProjMem.project = '$project'";
-		
-		$rst = $conn->execute($sql);
-		echo "<select name=\"name\" size=\"2\">";
-		while (!$rst->EOF) {
-			echo "<option value=\"".$rst->fields['name']."\">".$rst->fields['name']."</option>";
-			$rst->movenext();
-		}
-		echo "</select>";
-	}
+function ExportCSV() {
+	$filename = "./csv/Results_".$projectName."_".$username.".csv";
+	file_put_contents($filename, $GLOBALS['file'], LOCK_EX);
+	return $filename;
 }
+
 ?>
-
-<script language="javascript">
-/*Function:focus on the blank and alert the user to input the necessaries.
-*/
-function check_selection(form)
-{
-	if(form.name.value=="")
-	{
-		alert("Please select a stakeholder to delete!");
-		form.name.focus();
-		return false;
-	}
-	
-	form.submit();
-}
-
-function check(form)
-{
-	if(form.name.value=="")
-	{
-		alert("Please select a stakeholder to change info!");
-		form.name.focus();
-		return false;
-	}
-	if(form.pwd.value=="")
-	{
-		alert("Please input a new password for the stakeholder");
-		form.pwd.focus();
-		return false;
-	}
-	form.submit();
-}
-</script>
 
 <!doctype html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Edit Stakeholder</title>
+<title>View Results</title>
 <link rel="shortcut icon" href="favicon.ico" />
 <!-- Load CSS -->
 <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -114,7 +74,7 @@ function MM_validateForm() { //v4.0
 <div id="topcontrol" style="position: fixed; bottom: 5px; left: 960px; opacity: 1; cursor: pointer;" title="Go to Top"></div>
 <div id="header-wrapper">
   <div id="header">
-    <div id="logo"><img src="images/usc.png" width="140" alt="logo" /></div>
+  	<div id="logo"><img src="images/usc.png" width="140" alt="logo" /></div>
     <div id="header-text">
       <h3 style="font-family:Georgia, Times, serif; color: white">Distributed Assessment of Risks Tool(DART)</h3>
     </div>
@@ -136,58 +96,86 @@ function MM_validateForm() { //v4.0
 <!--END of menu-->
 <!--This is the START of the content-->
 <div id="content">
-  
-  
-  
-  
-<!--This is the START of the contact section-->
-<div id="contact">
-	<h5 style="margin-top:0px;">Edit Stakeholder</h5>
-	
-    <form method="post" action="deletestakeholder.php" name="delete_stakeholder_form" id="contactform">
-		<div class="boxes">
-            
-			<h5>&diams; Select a stakeholder to delete.</h5><br></br>
-        
-			<div>
-				<h6>Stakeholder:&nbsp </h6>
-				<?php
-					nameSelect("regular");
-				?>
+  <!--This is the START of the contact section-->
+    
+<h5 style="margin-top: 40px">View Result:
+<?php
+if ($role == "admin") {
+	$query = "SELECT * FROM Project";
+	$rst = $conn->Execute($query) or die($conn->errorMsg());
+	if ($_GET['project'] == null) {
+		$projectName = $rst->fields['projName'];
+		$lastAssessment = $rst->fields['lastAssessmentDate'];
+		$closed = $rst->fields['closed'];
+	}
+	else {
+		$projectName = $_GET['project'];
+		$projInfoQuery = "SELECT * FROM Project WHERE projectname='".$projectName."'";
+		$rst = $conn->Execute($projInfoQuery) or die($conn->errorMsg());
+		$lastAssessment = $rst->fields['lastAssessmentDate'];
+		$closed = $rst->fields['closed'];
+	}
+	echo "<select name=\"projeSelect\" style=\"margin-left: 55px;\" onchange=\"location.href=ViewResults.php?project=this.options[this.selectedIndex].value;\" >";
+	while (!$rst->EOF) {
+		echo "<option value=\"$rst->fields['projName']\">$rst->fields['projName']</option>";
+		$rst->movenext();
+	}
+	echo "</select>";
+}
+?>
+</h5>
+<h5 style="margin-top: 40px">Project Name:<font style="margin-left: 150px; color:#660000; "><?php echo $projectName; ?></font></h5>	
+<h5 style="margin-top: 40px">Last Assessment:<font style="margin-left: 150px; color:#660000; "><?php echo $lastAssessmentDate; ?></font><button type="button" style="align:right;" onclick="location.href=<?php ExportCSV(); ?>">Export CSV</button></h5>        
 
-				<div class="submitbtn">
-				<input type="submit" name='Delete Stakeholder' class="styled-button" onclick="return check_selection(delete_stakeholder_form);" value="Delete Stakeholder" />
-				</div>
-			</div>
-		</div>
-	</form>
-	
-	<form method="post" action="editstakeholderinfo.php" name="edit_stakeholder_form" id="contactform">
-        <div class="spacer">
-		
-			<h5>&diams; Change stakeholder info below.</h5><br></br>
-        
-			<div>
-				<h6>Name:&nbsp </h6>
-				<?php
-					nameSelect("regular");
-				?>
-				<br></br>
-			
-				<h6>New Password:&nbsp  </h6> <div class="box">
-				<input name="pwd" type="password"  class="input" id="sender_pw" title="Pw" value="" maxlength="2048"/></div>
+<div>
+<?php
+if ($closed == 0) {
+	echo "No Closed Voting Result Yet.";
+}
+else {
+	echo "
+	<table>
+		<thead>
+			<tr>
+				<th rowspan=\"2\">Rank</th>
+				<th rowspan=\"2\">Risk Item</th>
+				<th colspan=\"2\">RE</th>
+				<th colspan=\"2\">Average</th>
+				<th rowspan=\"2\">Mitigation Strategy</th>
+				<th rowspan=\"2\">Last Updated</th>
+			</tr>
+			<tr>
+				<th>Last</th>
+				<th>Last_1</th>
+				<th>P(UO)</th>
+				<th>L(UO)</th>
+			</tr>
+		</thead>";
+	echo "<tbody>";
+	$riskResultQuery = "SELECT * FROM ProjRiskDesc WHERE projname='".$projectName."'";
+	$riskRst = $conn->Execute($riskResultQuery) or die($conn->errorMsg());
+	$count = 1;
+	$file = "Project Name: ".$projectName."\n";
+	$file .= "Last Assessment: ".$lastAssessment."\n";
+	$file .= "Rank, Risk Item, Last RE, Last 1 RE, Avg. P(UO), Avg. L(UO), Risk Mitigation Strategy, Last Updated\n";
+	while (!$riskRst->EOF) {
+		//echo the table
+		echo "<tr><td>$count</td><td>".$riskRst->fields['riskName']."</td><td>".$riskRst->fields['lastRE']."</td><td>".$riskRst->fields['lastButOneRE']."</td><td>".$riskRst->fields['averagePUO']."</td><td>".$riskRst->fields['averageLUO']."</td><td>".$riskRst->fields['mitigation']."</td><td>".$riskRst->fields['mitigationUpdateTime']."</td></tr>";
+		//save in the file
+		$file .= $count.", ".$riskRst->fields['riskName'].", ".$riskRst->fields['lastRE'].", ".$riskRst->fields['lastButOneRE'].", ".$riskRst->fields['averagePUO'].", ".$riskRst->fields['averageLUO'].", \"".$riskRst->fields['mitigation']."\", ".$riskRst->fields['mitigationUpdateTime']."\n";
+		$riskRst->movenext();
+		$count++;
+	}
+	echo "</tbody>";
+	echo "</table>";
+}
+?>
+</div>  
 
-				<div class="submitbtn">
-				<input type="submit" name='Edit Stakeholder' class="styled-button" onclick="return check(edit_stakeholder_form);" value="Edit Stakeholder" />
-				</div>
-			</div>
-		</div>
-        
-    </form>
-</div>
-<!--END of contact section-->
-  
-  
+
+    
+  </div>
+  <!--END of contact section--> 
 </div>
 <!--END of content-->
 <p class="slide"><a href="#" class="btn-slide"></a></p>

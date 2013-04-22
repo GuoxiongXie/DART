@@ -1,52 +1,30 @@
-<script language="javascript">
-/*Function:focus on the blank and alert the user to input the necessaries.
-*/
-function check(form)
-{
-	if(form.projectName.value=="")
-	{
-		alert("Please input the Project name");
-		form.projectName.focus();
-		return false;
-	}
-	if(form.projectDesc.value=="")
-	{
-		alert("Please input the Project description");
-		form.projectDesc.focus();
-		return false;
-	}
-	if(form.managerName.value=="")
-	{
-		alert("Please input the Project manager");
-		form.managerName.focus();
-		return false;
-	}
-	if(form.managerPassword.value=="")
-	{
-		alert("Please input the Manager password");
-		form.managerPassword.focus();
-		return false;	
-	}
-	if(form.confirmManPwd.value=="")
-	{
-		alert("Please confirm manager password");
-		form.confirmManPwd.focus();
-		return false;		
-	}
-	else if (form.confirmManPwd.value != form.managerPassword.value) {
-		alert("Manager password and Confirm manager password don't match!");
-		form.confirmManPwd.focus();
-		return false;
-	}
-	form.submit();
-}
-</script>
+<?php
+//This action happens after users press save votes after entering their votes. The info they entered will be updated to IndividualVote.
 
-<!DOCTYPE html>
+include_once 'include/conn.php';
+session_start();
+
+$role = $_SESSION['authority']; //manager, admin, user; here it only can be manager
+
+$userName = $_SESSION['username'];
+$sql = "SELECT * FROM ProjMem WHERE member='".$userName."'";
+$rst = $conn->execute($sql);
+$projName = $rst->fields['project'];
+
+$sql1 = "SELECT * FROM Project WHERE projectname='".$projName."'";
+$rst1 = $conn->execute($sql1);
+$lastAssessmentDate = $rst1->fields['lastAssessmentDate'];
+
+//get the riskName from table then "Update IndividualVote ...where projName=$projName AND riskName=$riskName AND userName=$userName"
+
+
+?>
+
+<!doctype html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>TA setup project</title>
+<title>Close Voting Session</title>
 <link rel="shortcut icon" href="favicon.ico" />
 <!-- Load CSS -->
 <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -95,8 +73,9 @@ function MM_validateForm() { //v4.0
 <div id="topcontrol" style="position: fixed; bottom: 5px; left: 960px; opacity: 1; cursor: pointer;" title="Go to Top"></div>
 <div id="header-wrapper">
   <div id="header">
+  	<div id="logo"><img src="images/usc.png" width="140" alt="logo" /></div>
     <div id="header-text">
-      <h4>DISTRIBUTED ASSESSMENT OF RISKS TOOL(DART)</h4>
+      <h3 style="font-family:Georgia, Times, serif; color: white">Distributed Assessment of Risks Tool(DART)</h3>
     </div>
   </div>
 </div>
@@ -116,57 +95,31 @@ function MM_validateForm() { //v4.0
 <!--END of menu-->
 <!--This is the START of the content-->
 <div id="content">
-  
-  
-  
-  
   <!--This is the START of the contact section-->
   <div id="contact">
-  	<h5 style="margin-top:0px;">Welcome! Please set up projects for your class!<br><br></h5>
-    <h5>Project Setup</h5>
-    <p>Enter updates to project information below</p>
-    <form method="post" action="adminSetUpProj.php" name="admin_setup_form" id="contactform">
-      <div class="boxes">
-        <h6>Project name:</h6><br></br>
-        <div class="box">
-          <input name="projectName" type="text" class="input" id="sender_name" title="Projname" value="" maxlength="2048"/></div>
+    <h5 style="margin-top:0px;">&diams; Close Voting Session</h5><br/>
+    
+ 	<form action="closeVotingPeriod.php">
+		<p>Closing the session processes and time stamps the current assessment periods votes and updates the risk history data</p>
+		<br/>
+		<center>Last Assessment Date: <?php echo $lastAssessmentDate; ?><br></center>
+		<br/>
+		<center><input type="submit"  class="styled-button" value="Close Session"></center>
+	</form>
 
-        <h6>Project description:</h6>
-        <div class="msgbox">
-          <textarea name="projectDesc" class="message" id="cf_message" title="Description" value="" rows="50" cols="30" maxlength="2048"></textarea>
-        <!--size="30"-->
-        </div>
-        
-        <h6>Project manager:</h6><br></br>
-        <div class="box">
-          <input name="managerName" type="text" class="input" id="sender_manager" title="Projmanager" value="" maxlength="2048"/></div>
-          
-        <h6>Manager Password:</h6><br></br>
-        <div class="box">
-          <input name="managerPassword" type="password" class="input" id="sender_pw" title="Managerpw" value="" maxlength="2048"/></div>
-          
-        <h6>Confirm Manager Password:</h6><br></br>
-        <div class="box">
-          <input name="confirmManPwd" type="password" class="input" id="sender_pw" title="Managerpw" value="" maxlength="2048"/></div>
-        
-        <div class="submitbtn">
-          <input type="submit" name='Update' class="button btncolor" onclick="return check(admin_setup_form);" value="Creat Project" />
-        </div>
-      </div>
-    </form>
+
+    
   </div>
-  <!--END of contact section-->
-  
-  
+  <!--END of contact section--> 
 </div>
 <!--END of content-->
 <p class="slide"><a href="#" class="btn-slide"></a></p>
 <div id="slide-panel">
 	<!--This is the START of the follow section-->
 	<div id="follow">
-		<a href="login.html">
+		<a href="adminSignUp.html">
 		<div id="follow-setup"><img src="images/setup.jpg" />
-			<h4>TA Signin</h4>
+			<h4>TA Signup</h4>
 		</div>
 		</a>
 		<a href="login.html">	
@@ -174,23 +127,13 @@ function MM_validateForm() { //v4.0
 			<h4>Login</h4>
 		</div>
 		</a>
-		
 		<form method="post" action="logout.php">
 		<div id="follow-mail"><input type="image" src="images/logout.png" alt="Submit" name='Logout' value='Logout' />
 		<!--<div id="follow-mail"><img src="images/logout.png" /> -->
 			<h4>Logout</h4>
 		</div>
 		</form>
-		
-		<!--
-		<a href="about.html">
-		<div id="follow-mail"><img src="images/logout.png" />
-			<h4>Logout</h4>
-		</div>
-		</a>
-		-->
-		
-		<h1>Thanks for visiting!</h1>
+		<h1>Thanks for that!</h1>
 	</div>
 	<!--END of follow section-->
 </div>

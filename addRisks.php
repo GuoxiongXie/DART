@@ -48,7 +48,13 @@ else
 {
 	echo "<script>alert('A New Risk Item Has Been Added!');</script>";
 	//added the following line for Sprint I demo
-	echo "<script language='javascript'>window.location.href='setup.html';</script>"; //debug:where should I direct this to?
+	
+	if ($role == "manager"){
+		echo "<script language='javascript'>window.location.href='TA_setup.html';</script>";
+	}
+	else {
+		echo "<script language='javascript'>window.location.href='user_setup.html';</script>"; //debug:where should I direct this to?	
+	}
 }
 
 ?>
