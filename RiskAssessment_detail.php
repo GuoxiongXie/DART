@@ -1,10 +1,68 @@
+<?php
+//This action happens after manager or regular users clicks on "Risk Assessment" in the navigation bar on the left.
+//This file can be integrated with html to generate ballot table! (maybe this file is included in html file??)
+//The authority will be checked immediately.
+
+include_once 'include/conn.php';
+session_start();
+
+$role = $_SESSION['authority']; //manager, admin, user; here it only can be manager
+
+if ($role != "manager" && $role != "user"){
+	echo "<script>alert('Sorry, but you have to be one of the project managers or regular users to vote!');</script>";
+	echo "<script language='javascript'>window.location.href='setup.html';</script>";	//debug: go where?? This one should be for TA's
+}
+
+$username = $_SESSION['username'];
+$sql = "SELECT * FROM ProjMem WHERE member='".$username."'";
+$rst = $conn->execute($sql);
+$projName = $rst->fields['project'];
+
+//lookup (projName, riskName) in ProjRiskDesc
+$sql1 = "SELECT * FROM ProjRiskDesc WHERE projName='".$projName."'";	//this returns many rows since many risks
+$rst1 = $conn->execute($sql1);
+
+while (!$rst1->EOF) {	//for every row in ProjRiskDesc
+	//$projName = $rst1->fields['projName'];
+	$riskName = $rst1->fields['riskName'];
+	
+	//look up member in ProjMem for the project
+	$sql2 = "SELECT * FROM ProjMem WHERE project='$projName'";	//this returns many rows due to many members in a proj
+	$rst2 = $conn->execute($sql2);
+	
+	while (!$rst2->EOF){	//for every row in ProjMem with particular projName
+		$member = $rst2->fields['member'];
+		
+		//look up (projName, riskName, username) in IndividualVote, if no match, then insert it; if matched, do nothing.
+		$sql3 = "SELECT * FROM IndividualVote WHERE projName='$projName' AND riskName='$riskName' AND userName='$member'";
+		$rst3 = $conn->execute($sql3);
+		
+		if ($rst3->RecordCount() == 0){	//no matched, insert it
+			$sql4 = "insert into IndividualVote (projName, riskName, userName) values ('$projName', '$riskName', '$member')";
+			$rst4 = $conn->execute($sql4);
+		}
+		
+		//do nothing if matched.
+		
+		$rst2->movenext();
+	}
+	
+	
+	$rst1->movenext();	//move on to the next (projName, riskName) in ProjRiskDesc
+}
+
+$getRiskSQL = "SELECT * FROM ProjRiskDesc WHERE projName='".$projName."'";	//this returns many rows since many risks
+$getRiskRST = $conn->execute($getRiskSQL);
+$numberofrow = $getRiskRST->RecordCount();
+
+?>
 
 
 <!doctype html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Risk Assessment Detail</title>
+<title>Risk Assessment</title>
 <link rel="shortcut icon" href="favicon.ico" />
 <!-- Load CSS -->
 <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -76,7 +134,7 @@ function MM_validateForm() { //v4.0
 <!--This is the START of the content-->
 <div id="content">
   <!--This is the START of the contact section-->
- <div id="contact">
+  <div id="contact">
     <h5 style="margin-top:0px;">Risk Assessment Ballot</h5>
     <p>&diams; For each risks item enter value(0 to abstain, 1=low to 10=highest) for the following:</p>
     <p>P(UO)- Probability of Undesirable Outcome.</p>
@@ -85,12 +143,14 @@ function MM_validateForm() { //v4.0
     <p>&diams; Note that if you want to abstain from a risk item, enter 0 for both PUO and LUO.</p>
 	<br/>
 	<h5>Project Name:</h5>
-	<h5 style="color: #660000">Distributed Assessment of Risks Tool(DART)</h5>
+	<h5 style="color: #660000"><?php echo $projName; ?></h5>
 	<br/>
+          
 
+<form method="post" action="saveVotes.php" name="voting_form" id="voting_form">
 <div>
 	<table>
-		<thead>
+ 		<thead>
 			<th>ID</th>
 			<th>Risk Item</th>
 			<th>P(UO)</th>
@@ -99,44 +159,45 @@ function MM_validateForm() { //v4.0
 			<th>Other People</th>
 		</thead>
 		<tbody>
-			<tr>
-				<td>1</td>
-				<td>Unrealistic time and cost estimates </td>
-				<td><input style="width:25px" name="pvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
-				<td><input style="width:25px" name="lvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
-				<td><input name="rationale" type="text" class="input" id="sender_name" title="riskname" value="" maxlength="100"/></td>
+			<?php for($counter = 1;$counter<=$numberofrow;$counter++){ ?>
+			
+			  <tr>
+				<?php $riskName = $getRiskRST->fields['riskName']; ?>
+				<td><?php echo $counter; ?></td>
+				<td><?php echo $riskName; ?></td>
+				
+				<td><input style="width:25px" name="arr[pvalue][<?php echo $riskName;?>]" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
+				<td><input style="width:25px" name="arr[lvalue][<?php echo $riskName;?>]" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
+				<td><input name="arr[rationale][<?php echo $riskName;?>]" type="text" class="input" id="sender_name" title="riskname" value="" maxlength="100"/></td>
 				<td><a href="RiskAssessment.php">+</a></td>
-			</tr>
-			<tr>
-				<td>2</td>
-				<td>Developing the wrong software functions</td>
-				<td><input style="width:25px" name="pvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
-				<td><input style="width:25px" name="lvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
-				<td><input name="rationale" type="text" class="input" id="sender_name" title="riskname" value="" maxlength="100"/></td>
-				<td><a href="RiskAssessment.php">+</a></td>
-			</tr>
-			<tr>
-				<td>3</td>
-				<td>Lack of top management commitment to the project </td>
-				<td><input style="width:25px" name="pvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
-				<td><input style="width:25px" name="lvalue" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
-				<td><input name="rationale" type="text" class="input" id="sender_name" title="riskname" value="" maxlength="100"/></td>
-				<td><a href="RiskAssessment.php">+</a></td>
-			</tr>
+			  </tr>
+			
+			  <?php $getRiskRST->movenext(); ?>
+			<?php }?>
 		</tbody>
 	</table>
-</div>  
-<br/>
+</div>
+  
+	<br/>
 	<div class="submitbtn">
-
-		<input type="submit" name='Save Votes' class="styled-button" onclick="return check(setup_form);" value="Save Votes" />
+		<input type="submit" name='Save Votes' class="styled-button" onclick="return check(voting_form);" value="Save Votes" />
     </div>  
-</div>    
- <div id="contactinfo" style="width:300px; margin-left: 2px">    
+</form>
+  </div>
+  
+<div id="contactinfo" style="width:300px; margin-left: 2px">    
 
-<br/> 
-<h5>&diams; Detailed information:</h5><br />
+<br/>
+<?php $riskItem = $_GET['name'];
+
+$sameRiskSQL = "SELECT * FROM IndividualVote WHERE projName='$projName' AND riskName='$riskItem'";	//this returns many rows since many stakeholders.
+$sameRiskRST = $conn->execute($sameRiskSQL);
+$numberofstakeholder = $sameRiskRST->RecordCount();
+
+?>
+<?php echo "<h5>&diams; Here's how other stakeholders voted on ".$riskItem.":</h5><br />"; ?>
   <!--END of contact section--> 
+
 
 	<table>
 		<thead>
@@ -146,33 +207,31 @@ function MM_validateForm() { //v4.0
 			<th>Stakeholder Vote Rationale</th>
 		</thead>
 		<tbody>
+			<?php for($counter = 1;$counter<=$numberofstakeholder;$counter++){ ?>
+				
 			<tr>
-				<td>Jimmy Kim</td>
-				<td>2</td>
-				<td>2</td>
-				<td></td>	
+				<?php $stakeholder = $sameRiskRST->fields['userName']; ?>
+				<td><?php echo $stakeholder; ?></td>
+				<?php $aPUO = $sameRiskRST->fields['PUO']; ?>
+				<td><?php echo $aPUO; ?></td>
+				<?php $aLUO = $sameRiskRST->fields['LUO']; ?>
+				<td><?php echo $aLUO; ?></td>
+				<?php $aRationale = $sameRiskRST->fields['rationale']; ?>
+				<td><?php echo $aRationale; ?></td>
 			</tr>
-			<tr>
-				<td>John Smith</td>
-				<td>0</td>
-				<td>0</td>
-				<td></td>	
-			</tr>
-			<tr>
-				<td>Randal Laakmann</td>
-				<td>7</td>
-				<td>6</td>
-				<td></td>	
-			</tr>
+			  <?php $sameRiskRST->movenext(); ?>
+			<?php } ?>
 		</tbody>
 	</table>  
-</div>
+</div>  
+  
+  <!--END of contact section-->
 </div>
 <!--END of content-->
 <p class="slide"><a href="#" class="btn-slide"></a></p>
 <div id="slide-panel">
 	<!--This is the START of the follow section-->
-	<div id="follow">
+		<div id="follow">
 		<a href="adminSignUp.html">
 		<div id="follow-setup"><img src="images/setup.jpg" />
 			<h4>TA Signup</h4>

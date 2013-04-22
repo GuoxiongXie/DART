@@ -55,7 +55,23 @@ $getRiskSQL = "SELECT * FROM ProjRiskDesc WHERE projName='".$projName."'";	//thi
 $getRiskRST = $conn->execute($getRiskSQL);
 $numberofrow = $getRiskRST->RecordCount();
 
+function storeRiskNameInSession($riskName){
+	echo "the next thing is how to pass argument!";	
+}
+
+
 ?>
+
+
+
+<script language="javascript">
+/*Function:focus on the blank and alert the user to input the necessaries.
+*/
+function callPHPfxn(riskName)
+{
+ alert("<?php storeRiskNameInSession(); ?>");
+}
+</script>
 
 
 <!doctype html>
@@ -169,7 +185,9 @@ function MM_validateForm() { //v4.0
 				<td><input style="width:25px" name="arr[pvalue][<?php echo $riskName;?>]" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
 				<td><input style="width:25px" name="arr[lvalue][<?php echo $riskName;?>]" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
 				<td><input name="arr[rationale][<?php echo $riskName;?>]" type="text" class="input" id="sender_name" title="riskname" value="" maxlength="100"/></td>
-				<td><a href="RiskAssessment_detail.php" name="detail<?php echo $riskName;?>">+</a></td>
+				<!--<td><a href="RiskAssessment_detail.php" name="detail<?php echo $riskName;?>">+</a></td>-->
+				<td><a href="<?php echo "RiskAssessment_detail.php?name=".$riskName; ?>")">+</a></td>
+				
 			  </tr>
 			
 			  <?php $getRiskRST->movenext(); ?>
@@ -183,12 +201,10 @@ function MM_validateForm() { //v4.0
 		<input type="submit" name='Save Votes' class="styled-button" onclick="return check(voting_form);" value="Save Votes" />
     </div>  
 </form>
-  
-  
-  
-  
-    
   </div>
+  
+  
+  
   <!--END of contact section-->
 </div>
 <!--END of content-->
