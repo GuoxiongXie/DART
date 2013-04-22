@@ -166,9 +166,9 @@ function MM_validateForm() { //v4.0
 				<td><?php echo $counter; ?></td>
 				<td><?php echo $riskName; ?></td>
 				
-				<td><input style="width:25px" name="pvalue<?php echo $riskName;?>" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
-				<td><input style="width:25px" name="lvalue<?php echo $riskName;?>" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
-				<td><input name="rationale<?php echo $riskName;?>" type="text" class="input" id="sender_name" title="riskname" value="" maxlength="100"/></td>
+				<td><input style="width:25px" name="arr[pvalue][<?php echo $riskName;?>]" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
+				<td><input style="width:25px" name="arr[lvalue][<?php echo $riskName;?>]" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
+				<td><input name="arr[rationale][<?php echo $riskName;?>]" type="text" class="input" id="sender_name" title="riskname" value="" maxlength="100"/></td>
 				<td><a href="RiskAssessment_detail.php" name="detail<?php echo $riskName;?>">+</a></td>
 			  </tr>
 			

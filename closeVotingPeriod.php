@@ -52,7 +52,10 @@ while (!$rst1->EOF) {	//for every row in ProjRiskDesc
 		$LUOsum = $LUOsum + $LUO;
 		$lastREsum = $lastREsum + $PUO * $LUO;
 		
-		$counter = $counter + 1;
+		if ($PUO != 0 && $LUO != 0){	//not counting those who astains voting on a risk item or those who has not voted yet.
+			$counter = $counter + 1;	
+		}
+		
 		$rst2->movenext();
 	}
 	

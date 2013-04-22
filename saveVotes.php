@@ -10,8 +10,37 @@ $userName = $_SESSION['username'];
 $sql = "SELECT * FROM ProjMem WHERE member='".$userName."'";
 $rst = $conn->execute($sql);
 $projName = $rst->fields['project'];
+//echo "the projName is ".$projName;
+//echo "      ";
 
-//get the riskName from table then "Update IndividualVote ...where projName=$projName AND riskName=$riskName AND userName=$userName"
+$sql1 = "SELECT * FROM ProjRiskDesc WHERE projName='".$projName."'";	//this returns many rows since many risks
+$rst1 = $conn->execute($sql1);
+//echo "the rst1 is ".$rst1;
 
+while (!$rst1->EOF) {	//for every row in ProjRiskDesc
+	$riskName = $rst1->fields['riskName'];
+	//echo "the riskName is ".$riskName;
+	
+	//insert votes for (projName, riskName, userName)
+	
+	$arr = $_POST['arr'];
+	
+	$PUO = $arr["pvalue"][$riskName];
+	
+	$LUO = $arr["lvalue"][$riskName];
+	
+	$rationale = $arr["rationale"][$riskName];
+	
+	$updateVoteSQL = "UPDATE IndividualVote SET PUO='$PUO', LUO='$LUO', rationale='$rationale' WHERE projName='$projName' AND riskName='$riskName' AND userName='$userName'";
+	//echo "the SQL is ".$updateVoteSQL;
+	
+	$updateRST = $conn->execute($updateVoteSQL);
+	
+	$rst1->movenext();	//move on to the next (projName, riskName) in ProjRiskDesc
+}
+
+//take the user back to main page
+echo "<script language='javascript'>alert('Thanks for submitting your vote! Please check View Results later!');</script>";
+echo "<script language='javascript'>window.location.href='about.html';</script>";
 
 ?>

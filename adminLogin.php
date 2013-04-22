@@ -25,3 +25,4 @@ else
 	echo "<script language='javascript'>alert('Incorrect Username OR Password!');</script>";
 	echo "<script language='javascript'>window.location.href='adminSignUp.html';</script>";	//incorrect info entered, go back to sign in page
 }
+?>
