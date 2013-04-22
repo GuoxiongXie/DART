@@ -10,10 +10,10 @@ if ($role == null){
 }
 else { //already login; check role
 	if ($role == "manager"){
-		header('Location: RiskAssessment.html');	
+		header('Location: RiskAssessment.php');	
 	}
 	else if ($role == "user"){
-		header('Location: RiskAssessment.html');
+		header('Location: RiskAssessment.php');
 	}
 	else {	//TA
 		echo "<script language='javascript'>alert('Sorry but you have to be a manager or member in the project to vote');</script>";
