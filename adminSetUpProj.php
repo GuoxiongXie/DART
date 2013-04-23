@@ -46,6 +46,6 @@ else
 {
 	echo "<script>alert('A New Project Has Been Set Up! Now you can setup another one or log out!');</script>";
 	//added the following line for Sprint I demo
-	echo "<script language='javascript'>window.location.href='adminSetUpProj.html';</script>"; //debug:where should I direct this to?
+	echo "<script language='javascript'>window.location.href='TAproject.php';</script>"; //debug:where should I direct this to?
 }
 ?>

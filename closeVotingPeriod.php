@@ -23,6 +23,10 @@ $lastAssessmentDate = date("Y-m-d");
 $updateAssessDateSQL = "UPDATE Project SET lastAssessmentDate = '$lastAssessmentDate' WHERE projectname='$projName'";		//debug: check the type of closed. update the last assessment date and close the voting session
 $updateAssessDateRST = $conn->execute($updateAssessDateSQL);
 
+//-------update closed-------------------
+$updateClosedSQL = "UPDATE Project SET closed = '1' WHERE projectname='$projName'";		//debug: check the type of closed. update the last assessment date and close the voting session
+$updateClosedRST = $conn->execute($updateClosedSQL);
+
 //-------UPDATE the info in ProjRiskDesc, do calculations here-----------
 $sql1 = "select * from ProjRiskDesc";	//get all the rows in ProjRiskDesc, where (projName, riskName) is unique.
 $rst1 = $conn->execute($sql1);

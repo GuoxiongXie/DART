@@ -1,53 +1,16 @@
+<!--Note that this page is for user to view the project description-->
 
-<script language="javascript">
-/*Function:focus on the blank and alert the user to input the necessaries.
-*/
-function check(form)
-{
-	if(form.projectName.value=="")
-	{
-		alert("Please input the Project name");
-		form.projectName.focus();
-		return false;
-	}
-	if(form.projectDesc.value=="")
-	{
-		alert("Please input the Project description");
-		form.projectDesc.focus();
-		return false;
-	}
-	if(form.managerName.value=="")
-	{
-		alert("Please input the Project manager");
-		form.managerName.focus();
-		return false;
-	}
-	if(form.managerPassword.value=="")
-	{
-		alert("Please input the Manager password");
-		form.managerPassword.focus();
-		return false;	
-	}
-	if(form.confirmManPwd.value=="")
-	{
-		alert("Please confirm manager password");
-		form.confirmManPwd.focus();
-		return false;		
-	}
-	else if (form.confirmManPwd.value != form.managerPassword.value) {
-		alert("Manager password and Confirm manager password don't match!");
-		form.confirmManPwd.focus();
-		return false;
-	}
-	form.submit();
-}
-</script>
+<?php
+include_once 'include/conn.php';
+include_once 'managerModifyProjDescription.php';
+session_start();
+?>
 
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>TA setup project</title>
+<title>Manager Setup project</title>
 <link rel="shortcut icon" href="favicon.ico" />
 <!-- Load CSS -->
 <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -124,40 +87,70 @@ function MM_validateForm() { //v4.0
   
   <!--This is the START of the contact section-->
   <div id="contact">
-  	<h5 style="margin-top:0px;">Welcome! Please set up projects for your class!<br><br></h5>
-    <h5>Project Setup</h5>
+  	
+  	<h5 style="margin-top:0px;">&diams; Project Profile</h5>
     <p>Enter updates to project information below</p>
-    <form method="post" action="adminSetUpProj.php" name="admin_setup_form" id="contactform">
-      <div class="boxes">
-        <h6>Project name:</h6><br></br>
-        <div class="box">
-          <input name="projectName" type="text" class="input" id="sender_name" title="Projname" value="" maxlength="2048"/></div>
-
-        <h6>Project description:</h6>
-        <div class="msgbox">
-          <textarea name="projectDesc" class="message" id="cf_message" title="Description" value="" rows="50" cols="30" maxlength="2048"></textarea>
+    <?php displayProjInfo(); ?> <!--newly added: call the function to populate the variables -->
+    
+    <form method="post" action="user_setup.html" name="setup_form" id="contactform">
+      	<div class="boxes">
+        	<h5>Project name:</h5><br></br>
+        	<div class="box">
+          <!--<input name="projectname" type="text" class="input" id="sender_name" title="Projname" value="" maxlength="2048"/></div>-->
+				<?php echo $projName; ?>
+			</div>
+			
+        	<h5>Project description:</h5><br></br>
+        	<div class="msgbox">
+         	 <?php
+          	echo $projDesc;
+          	?>
         <!--size="30"-->
-        </div>
+        	</div>
         
-        <h6>Project manager:</h6><br></br>
-        <div class="box">
-          <input name="managerName" type="text" class="input" id="sender_manager" title="Projmanager" value="" maxlength="2048"/></div>
-          
-        <h6>Manager Password:</h6><br></br>
-        <div class="box">
-          <input name="managerPassword" type="password" class="input" id="sender_pw" title="Managerpw" value="" maxlength="2048"/></div>
-          
-        <h6>Confirm Manager Password:</h6><br></br>
-        <div class="box">
-          <input name="confirmManPwd" type="password" class="input" id="sender_pw" title="Managerpw" value="" maxlength="2048"/></div>
-        
-        <div class="submitbtn">
-          <input type="submit" name='Update' class="button btncolor" onclick="return check(admin_setup_form);" value="Creat Project" />
-        </div>
-      </div>
-    </form>
+        	<div class="submitbtn">
+          		<input type="submit" name='Update' class="styled-button" onclick="return check(setup_form);" value="Go Back" />
+        	</div>
+   	     </div> 
+   	</form> 
   </div>
-  <!--END of contact section-->
+    
+    
+    <div id="contactinfo" style="width:300px; margin-left: 2px">    
+        <h5>Stakeholder:</h5><br/>
+        <div>
+        	<table style="margin-left: 50px">
+				<thead>
+					<th>Role</th>
+					<th>Stakeholder Name</th>
+				</thead>
+				<tbody>
+				<?php
+				$findMgrQuery = "SELECT ProjMem.member AS member FROM ProjMem, Manager WHERE ProjMem.project='".$projName."' AND Manager.name=ProjMem.member";
+				$rst1 = $conn->Execute($findMgrQuery) or die($conn->errorMsg());
+				while (!$rst1->EOF) {
+					echo "<tr>";
+					echo "<td>Manager</td>";
+					echo "<td>".$rst1->fields['member']."</td>";
+					echo "</tr>";
+					$rst1->movenext();
+				}
+				$findUserQuery = "SELECT ProjMem.member AS member FROM ProjMem, RegularUser WHERE ProjMem.project='".$projName."' AND RegularUser.name=ProjMem.member";
+				$rst1 = $conn->Execute($findUserQuery) or die($conn->errorMsg());
+				while (!$rst1->EOF) {
+					echo "<tr>";
+					echo "<td>Regular User</td>";
+					echo "<td>".$rst1->fields['member']."</td>";
+					echo "</tr>";
+					$rst1->movenext();
+				}
+				?>
+				</tbody>
+			</table>	
+		</div>
+    </div>
+
+    <!--END of contact section-->
   
   
 </div>
@@ -166,9 +159,9 @@ function MM_validateForm() { //v4.0
 <div id="slide-panel">
 	<!--This is the START of the follow section-->
 	<div id="follow">
-		<a href="login.html">
+		<a href="adminSignUp.html">
 		<div id="follow-setup"><img src="images/setup.jpg" />
-			<h4>TA Signin</h4>
+			<h4>TA Signup</h4>
 		</div>
 		</a>
 		<a href="login.html">	
@@ -176,23 +169,13 @@ function MM_validateForm() { //v4.0
 			<h4>Login</h4>
 		</div>
 		</a>
-		
-		<form method="post" action="logout.php">
+	<form method="post" action="logout.php">
 		<div id="follow-mail"><input type="image" src="images/logout.png" alt="Submit" name='Logout' value='Logout' />
 		<!--<div id="follow-mail"><img src="images/logout.png" /> -->
 			<h4>Logout</h4>
 		</div>
 		</form>
-		
-		<!--
-		<a href="about.html">
-		<div id="follow-mail"><img src="images/logout.png" />
-			<h4>Logout</h4>
-		</div>
-		</a>
-		-->
-		
-		<h1>Thanks for visiting!</h1>
+		<h1>Thanks for that!</h1>
 	</div>
 	<!--END of follow section-->
 </div>

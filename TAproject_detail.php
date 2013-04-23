@@ -1,4 +1,21 @@
+<?php
+//This action happens after manager or regular users clicks on "Risk Assessment" in the navigation bar on the left.
+//This file can be integrated with html to generate ballot table! (maybe this file is included in html file??)
+//The authority will be checked immediately.
 
+include_once 'include/conn.php';
+session_start();
+
+//$username = $_SESSION['username'];
+//$sql = "SELECT * FROM ProjMem WHERE member='".$username."'";
+//$rst = $conn->execute($sql);
+//$projName = $rst->fields['project'];
+
+$selectAllProj = "SELECT * FROM Project";
+$selectAllProjRST = $conn->execute($selectAllProj);
+$numberofrow = $selectAllProjRST->RecordCount();
+
+?>
 
 <!doctype html>
 <html>
@@ -81,8 +98,8 @@ function MM_validateForm() { //v4.0
     <h5 style="margin-top:0px;">&diams; Display Project Information</h5><br></br>
 	
 	<div class="submitbtn">
-		<input type="submit" name='+ Add new' class="styled-button" onclick="return check(setup_form);" value="+ Add New" />
-    </div>            
+		<input type="submit" name='+ Add new' class="styled-button" value="+ Add New" onclick="window.location.href='adminSetUpProj.html';"/>
+    </div>           
 
 
 	<table>
@@ -92,62 +109,71 @@ function MM_validateForm() { //v4.0
 			<th>Project Description</th>
 		</thead>
 		<tbody>
+			<?php for($counter = 1;$counter<=$numberofrow;$counter++){ ?>
 			<tr>
-				<td>1</td>
-				<td>Agile Board</td>
-				<td> use online agile board to capture to do – doing – done tasks<a href="TAproject_detail.html">...more info</a></td>
+				<td><?php echo $counter; ?></td>
+				<?php $projectName = $selectAllProjRST->fields['projectname']; ?>
+				<td><?php echo $projectName; ?></td>
+				<?php $projectDesc = $selectAllProjRST->fields['projectdesc']; ?>
+				<td> <?php echo $projectDesc."<a href=\"TAproject_detail.php?project=".$projectName."\">...more info</a>"; ?></td>
 			</tr>
-			<tr>
-				<td>2</td>
-				<td>Distributed Assessment of risks tool(DART)</td>
-				<td>aid risk assessment efforts by providing a web<a href="TAproject_detail.html">...more info</td>
-			</tr>
-			<tr>
-				<td>3</td>
-				<td>Technical Report System</td>
-				<td>collect the technical papers for<a href="TAproject_detail.html">...more info</td>
-			</tr>
-			<tr>
-				<td>4</td>
-				<td>Children Database</td>
-				<td>Add school information and sponsor information<a href="TAproject_detail.html">...more info</td>
-			</tr>
+					
+			<?php $selectAllProjRST->movenext(); } ?>
 		</tbody>
 	</table>
 	
   </div>
   
+  	<?php $aProjName = $_GET['project'];
+
+	$getProjSQL = "SELECT * FROM Project WHERE projectname='$aProjName'";	//this returns many rows since many stakeholders.
+	$getProjRST = $conn->execute($getProjSQL);
+	$projDESC = $getProjRST->fields['projectdesc'];
+	//$numberofstakeholder = $sameRiskRST->RecordCount();
+
+	$getMemSQL = "SELECT * FROM ProjMem WHERE project='$aProjName'";
+	$getMemRST = $conn->execute($getMemSQL);
+	
+	?>
+  
   
   <div id="contactinfo" style="width:300px; margin-left: 2px">
     <h5>&diams; Detailed information:</h5><br />
     <h5 style="color:#B22222">Project name:</h5>
-    <p>Distributed Assessment of risks tool(DART)</p>
+    <p><?php echo $aProjName; ?></p>
     <h5 style="color:#B22222">Project description:</h5>
-    <p>DART is used to provide a means to address these issues with respect to project risk assessment and tracking.</p>
-    <h5 style="color:#B22222">Project Manager</h5>
-    <p>John Smith</p>
+    <p><?php echo $projDESC; ?></p>
+    
     <br/>
     <h5 style="color:#B22222">Stakeholder</h5>
-    <table>
-		<thead>
-			<th>Role</th>
-			<th>Stakeholder Name</th>
-		</thead>
-		<tbody>
-			<tr>
-				<td>Manager</td>
-				<td>John Smith</td>
-		    </tr>
-			<tr>
-				<td>Regular User</td>
-				<td>Kathy Rich</td>
-		    </tr>
-		    <tr>
-				<td>Regular User</td>
-				<td>Max Nikias</td>
-		    </tr>
-		 </tbody>
-	</table>
+    		<table style="margin-left: 50px">
+				<thead>
+					<th>Role</th>
+					<th>Stakeholder Name</th>
+				</thead>
+				<tbody>
+				<?php
+				$findMgrQuery = "SELECT ProjMem.member AS member FROM ProjMem, Manager WHERE ProjMem.project='".$aProjName."' AND Manager.name=ProjMem.member";
+				$rst1 = $conn->Execute($findMgrQuery) or die($conn->errorMsg());
+				while (!$rst1->EOF) {
+					echo "<tr>";
+					echo "<td>Manager</td>";
+					echo "<td>".$rst1->fields['member']."</td>";
+					echo "</tr>";
+					$rst1->movenext();
+				}
+				$findUserQuery = "SELECT ProjMem.member AS member FROM ProjMem, RegularUser WHERE ProjMem.project='".$aProjName."' AND RegularUser.name=ProjMem.member";
+				$rst1 = $conn->Execute($findUserQuery) or die($conn->errorMsg());
+				while (!$rst1->EOF) {
+					echo "<tr>";
+					echo "<td>Regular User</td>";
+					echo "<td>".$rst1->fields['member']."</td>";
+					echo "</tr>";
+					$rst1->movenext();
+				}
+				?>
+				</tbody>
+			</table>	
    </div>
   <!--END of contact section--> 
 </div>

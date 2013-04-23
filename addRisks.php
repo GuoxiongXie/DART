@@ -50,7 +50,7 @@ else
 	//added the following line for Sprint I demo
 	
 	if ($role == "manager"){
-		echo "<script language='javascript'>window.location.href='TA_setup.html';</script>";
+		echo "<script language='javascript'>window.location.href='Manager_setup.html';</script>";
 	}
 	else {
 		echo "<script language='javascript'>window.location.href='user_setup.html';</script>"; //debug:where should I direct this to?	

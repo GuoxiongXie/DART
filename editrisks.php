@@ -170,19 +170,20 @@ function MM_validateForm() { //v4.0
 </div>
 <!--END of menu-->
 <!--This is the START of the content-->
-<div id="content">
+<div id="content" style="width:1200px">
   
   
   
   
   <!--This is the START of the contact section-->
-  <div id="contact">
+  <div id="contact" style="float:left;">
     <h3 style="margin-top:0px;">&diams; Edit Risks</h3>
     
     <h6>Project name:&nbsp</h6> 
     <div class="box">
     	<?php displayProjName() ?>
     </div>
+    
     
     <form method="post" action="deleteRisk.php" name="delete_risk_form" id="contactform">
       <div class="boxes">
@@ -204,11 +205,15 @@ function MM_validateForm() { //v4.0
         	</div>
         </div>
      </form>
-      
-      
-      
-       
-        <div class="spacer"></div>
+     <div class="spacer"></div>
+    
+    
+    
+    
+    
+    
+    
+    
         
         <h5>&diams; Update the mitigation plan for the selected risk.</h5><br></br>
         
@@ -268,7 +273,36 @@ function MM_validateForm() { //v4.0
     
   </div>
   <!--END of contact section-->
-  
+     
+  <div id="contact" style="float:left;text-align:center;">
+  	<h5 style="margin-top:0px;">Existing Risks</h5><br>
+  	<table style="margin-left: 50px">
+		<thead>
+			<th>Risk Name</th>
+			<th>Risk Description</th>
+		</thead>
+		<tbody>
+  	<?php
+  		$managerName = $_SESSION['username'];	//get the name of manager, this managerName can actually be username too
+		$findProjQuery = "SELECT project FROM ProjMem WHERE member='".$managerName."'";
+		$strangeProjName = $conn->Execute($findProjQuery) or die($conn->errrorMsg()); //debug: the output is actually "project sth".
+		$projName = trim(substr($strangeProjName, 8)); //get the actual input name, trim removes all the whitespaces in the front and at the end
+		$findRiskQuery = "SELECT * FROM ProjRiskDesc WHERE projName='".$projName."'";
+		$rst = $conn->Execute($findRiskQuery) or die($conn->errorMsg());
+		while (!$rst->EOF) {
+			echo "<tr>";
+			echo "<td>".$rst->fields['riskName']."</td>";
+			echo "<td>".$rst->fields['riskDesc']."</td>";
+			echo "</tr>";
+			$rst->movenext();
+		}
+
+  	?>
+  	</tbody>
+	</table>
+  </div>
+    
+  <div style="clear:both;"></div>
   
 </div>
 <!--END of content-->

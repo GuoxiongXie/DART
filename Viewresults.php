@@ -14,8 +14,9 @@ if ($role != "admin") {
 }
 
 function ExportCSV() {
-	$filename = "./csv/Results_".$projectName."_".$username.".csv";
-	file_put_contents($filename, $GLOBALS['file'], LOCK_EX);
+	$projectName = $_SESSION['project'];
+	$username = $_SESSION['username'];
+	$filename = "csv/Results_".$username.".csv";
 	return $filename;
 }
 
@@ -104,20 +105,25 @@ if ($role == "admin") {
 	$query = "SELECT * FROM Project";
 	$rst = $conn->Execute($query) or die($conn->errorMsg());
 	if ($_GET['project'] == null) {
-		$projectName = $rst->fields['projName'];
+		$projectName = $rst->fields['projectname'];
 		$lastAssessment = $rst->fields['lastAssessmentDate'];
 		$closed = $rst->fields['closed'];
 	}
 	else {
 		$projectName = $_GET['project'];
 		$projInfoQuery = "SELECT * FROM Project WHERE projectname='".$projectName."'";
-		$rst = $conn->Execute($projInfoQuery) or die($conn->errorMsg());
-		$lastAssessment = $rst->fields['lastAssessmentDate'];
-		$closed = $rst->fields['closed'];
+		$infoRst = $conn->Execute($projInfoQuery) or die($conn->errorMsg());
+		$lastAssessment = $infoRst->fields['lastAssessmentDate'];
+		$closed = $infoRst->fields['closed'];
 	}
-	echo "<select name=\"projeSelect\" style=\"margin-left: 55px;\" onchange=\"location.href=ViewResults.php?project=this.options[this.selectedIndex].value;\" >";
+	echo "<select name=\"projeSelect\" style=\"margin-left: 55px;\" onchange=\"window.location.href='Viewresults.php?project='+this.value\" >";
 	while (!$rst->EOF) {
-		echo "<option value=\"$rst->fields['projName']\">$rst->fields['projName']</option>";
+		if ($projectName == $rst->fields['projectname']) {
+			echo "<option value=\"".$rst->fields['projectname']."\" selected=\"selected\" >".$rst->fields['projectname']."</option>";
+		}
+		else {
+			echo "<option value=\"".$rst->fields['projectname']."\">".$rst->fields['projectname']."</option>";
+		}
 		$rst->movenext();
 	}
 	echo "</select>";
@@ -125,7 +131,7 @@ if ($role == "admin") {
 ?>
 </h5>
 <h5 style="margin-top: 40px">Project Name:<font style="margin-left: 150px; color:#660000; "><?php echo $projectName; ?></font></h5>	
-<h5 style="margin-top: 40px">Last Assessment:<font style="margin-left: 150px; color:#660000; "><?php echo $lastAssessmentDate; ?></font><button type="button" style="align:right;" onclick="location.href=<?php ExportCSV(); ?>">Export CSV</button></h5>        
+<h5 style="margin-top: 40px">Last Assessment:<font style="margin-left: 150px; color:#660000; "><?php echo $lastAssessmentDate; ?></font><?php if ($closed != 0 ) { ?><button type="button" style="align:right;" onclick="window.location.href='<?php echo ExportCSV(); ?>'">Export CSV</button><?php } ?></h5>        
 
 <div>
 <?php
@@ -152,7 +158,7 @@ else {
 			</tr>
 		</thead>";
 	echo "<tbody>";
-	$riskResultQuery = "SELECT * FROM ProjRiskDesc WHERE projname='".$projectName."'";
+	$riskResultQuery = "SELECT * FROM ProjRiskDesc WHERE projname='".$projectName."' ORDER BY lastRE DESC";
 	$riskRst = $conn->Execute($riskResultQuery) or die($conn->errorMsg());
 	$count = 1;
 	$file = "Project Name: ".$projectName."\n";
@@ -162,12 +168,14 @@ else {
 		//echo the table
 		echo "<tr><td>$count</td><td>".$riskRst->fields['riskName']."</td><td>".$riskRst->fields['lastRE']."</td><td>".$riskRst->fields['lastButOneRE']."</td><td>".$riskRst->fields['averagePUO']."</td><td>".$riskRst->fields['averageLUO']."</td><td>".$riskRst->fields['mitigation']."</td><td>".$riskRst->fields['mitigationUpdateTime']."</td></tr>";
 		//save in the file
-		$file .= $count.", ".$riskRst->fields['riskName'].", ".$riskRst->fields['lastRE'].", ".$riskRst->fields['lastButOneRE'].", ".$riskRst->fields['averagePUO'].", ".$riskRst->fields['averageLUO'].", \"".$riskRst->fields['mitigation']."\", ".$riskRst->fields['mitigationUpdateTime']."\n";
+		$file .= $count.", ".$riskRst->fields['riskName'].", ".$riskRst->fields['lastRE'].", ".$riskRst->fields['lastButOneRE'].", ".$riskRst->fields['averagePUO'].", ".$riskRst->fields['averageLUO'].", ".$riskRst->fields['mitigation'].", ".$riskRst->fields['mitigationUpdateTime']."\n";
 		$riskRst->movenext();
 		$count++;
 	}
 	echo "</tbody>";
 	echo "</table>";
+	$filename = "./csv/Results_".$username.".csv";
+	file_put_contents($filename, $file, LOCK_EX);
 }
 ?>
 </div>  

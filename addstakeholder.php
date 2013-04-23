@@ -25,7 +25,7 @@ if ($role == 'sm') {
 		echo "<script language='javascript'>window.location.href='addstakeholderFrontEnd.php';</script>";
 	}
 	echo "<script language='javascript'>alert('Success!');</script>";
-	echo "<script language='javascript'>window.location.href='setup.html';</script>";
+	echo "<script language='javascript'>window.location.href='Manager_setup.html';</script>";
 }
 else if ($role == 'sn') {
 	$sql = "insert into RegularUser(name, pwd) values ('$username', '$cPassword')";
@@ -44,7 +44,7 @@ else if ($role == 'sn') {
 		echo "<script language='javascript'>window.location.href='addstakeholderFrontEnd.php';</script>";
 	}
 	echo "<script language='javascript'>alert('Success!');</script>";
-	echo "<script language='javascript'>window.location.href='setup.html';</script>";
+	echo "<script language='javascript'>window.location.href='Manager_setup.html';</script>";
 }
 
 ?>

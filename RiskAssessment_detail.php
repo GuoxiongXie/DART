@@ -196,9 +196,7 @@ $numberofstakeholder = $sameRiskRST->RecordCount();
 
 ?>
 <?php echo "<h5>&diams; Here's how other stakeholders voted on ".$riskItem.":</h5><br />"; ?>
-  <!--END of contact section--> 
-
-
+  <!--END of contact section-->
 	<table>
 		<thead>
 			<th>Stakeholder</th>

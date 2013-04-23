@@ -55,23 +55,10 @@ $getRiskSQL = "SELECT * FROM ProjRiskDesc WHERE projName='".$projName."'";	//thi
 $getRiskRST = $conn->execute($getRiskSQL);
 $numberofrow = $getRiskRST->RecordCount();
 
-function storeRiskNameInSession($riskName){
-	echo "the next thing is how to pass argument!";	
-}
-
 
 ?>
 
 
-
-<script language="javascript">
-/*Function:focus on the blank and alert the user to input the necessaries.
-*/
-function callPHPfxn(riskName)
-{
- alert("<?php storeRiskNameInSession(); ?>");
-}
-</script>
 
 
 <!doctype html>

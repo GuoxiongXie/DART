@@ -1,10 +1,26 @@
+<?php
+//This action happens after manager or regular users clicks on "Risk Assessment" in the navigation bar on the left.
+//This file can be integrated with html to generate ballot table! (maybe this file is included in html file??)
+//The authority will be checked immediately.
 
+include_once 'include/conn.php';
+session_start();
+
+//$username = $_SESSION['username'];
+//$sql = "SELECT * FROM ProjMem WHERE member='".$username."'";
+//$rst = $conn->execute($sql);
+//$projName = $rst->fields['project'];
+
+$selectAllProj = "SELECT * FROM Project";
+$selectAllProjRST = $conn->execute($selectAllProj);
+$numberofrow = $selectAllProjRST->RecordCount();
+?>
 
 <!doctype html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Regular user review project</title>
+<title>TA review the project</title>
 <link rel="shortcut icon" href="favicon.ico" />
 <!-- Load CSS -->
 <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -53,7 +69,7 @@ function MM_validateForm() { //v4.0
 <div id="topcontrol" style="position: fixed; bottom: 5px; left: 960px; opacity: 1; cursor: pointer;" title="Go to Top"></div>
 <div id="header-wrapper">
   <div id="header">
-    <div id="logo"><img src="images/usc.png" width="140" alt="logo" /></div>
+  	<div id="logo"><img src="images/usc.png" width="140" alt="logo" /></div>
     <div id="header-text">
       <h3 style="font-family:Georgia, Times, serif; color: white">Distributed Assessment of Risks Tool(DART)</h3>
     </div>
@@ -75,55 +91,41 @@ function MM_validateForm() { //v4.0
 <!--END of menu-->
 <!--This is the START of the content-->
 <div id="content">
+  
+  
+  
+  
   <!--This is the START of the contact section-->
   <div id="contact">
-    <h5 style="margin-top:0px;">&diams; Project Review</h5>
-    <p>Enter updates to project information below</p>
-   <br/>
-
-        <h5>Project name:</h5>
-        <div style="margin-left: 50px">
-          <input name="projectname" style="width: 80%" type="text" class="input" id="sender_name" title="Projname" value="" maxlength="2048"/></div>
-		<br/>
-        <h5>Project description:</h5>
-        <div class="msgbox" style="margin-left: 50px">
-          <textarea name="projectdesc" class="message" style="width: 80%; height: 120px"  id="cf_message" title="Description" value="" rows="50" cols="30" maxlength="2048"></textarea>
-        <!--size="30"-->
-        </div>
-   </div>
-
-	 
-  <div id="contactinfo" style="width:300px; margin-left: 2px">
-    
-    <h5>Stakeholder:</h5><br/>
-    <table>
+    <h5 style="margin-top:0px;">&diams; Display Project Information</h5><br></br>
+	
+	<div class="submitbtn">
+		<input type="submit" name='+ Add new' class="styled-button" value="+ Add New" onclick="window.location.href='adminSetUpProj.html';"/>
+    </div>
+	
+<div>
+	<table>
 		<thead>
-			<th>Role</th>
-			<th>Stakeholder Name</th>
+			<th>ID</th>
+			<th>Project Name</th>
+			<th>Project Description</th>
 		</thead>
 		<tbody>
+			<?php for($counter = 1;$counter<=$numberofrow;$counter++){ ?>
 			<tr>
-				<td>Manager</td>
-				<td>John Smith</td>
-		    </tr>
-			<tr>
-				<td>Regular User</td>
-				<td>Kathy Rich</td>
-		    </tr>
-		    <tr>
-				<td>Regular User</td>
-				<td>Max Nikias</td>
-		    </tr>
-		 </tbody>
+				<td><?php echo $counter; ?></td>
+				<?php $projectName = $selectAllProjRST->fields['projectname']; ?>
+				<td><?php echo $projectName; ?></td>
+				<?php $projectDesc = $selectAllProjRST->fields['projectdesc']; ?>
+				<td> <?php echo $projectDesc."<a href=\"TAproject_detail.php?project=".$projectName."\">...more info</a>"; ?></td>
+			</tr>
+					
+			<?php $selectAllProjRST->movenext(); } ?>
+		</tbody>
 	</table>
-   </div>
-        
-
-
+</div>  
   </div>
-  <!--END of contact section-->
-  
-  
+  <!--END of contact section--> 
 </div>
 <!--END of content-->
 <p class="slide"><a href="#" class="btn-slide"></a></p>

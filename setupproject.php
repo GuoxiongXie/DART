@@ -110,7 +110,7 @@ function MM_validateForm() { //v4.0
   <!--This is the START of the contact section-->
   <div id="contact">
   	
-  	<h5 style="margin-top:0px;">&diams; Project Setup</h5>
+  	<h5 style="margin-top:0px;">&diams; Project Profile</h5>
     <p>Enter updates to project information below</p>
     <?php displayProjInfo(); ?> <!--newly added: call the function to populate the variables -->
     
@@ -125,7 +125,7 @@ function MM_validateForm() { //v4.0
         	<h5>Project description:</h5>
         	<div class="msgbox">
          	 <?php
-          	echo '<textarea name="projectdesc" class="message" id="cf_message" title="Description" value="" rows="50" cols="30" maxlength="2048">'.$projDesc.'</textarea>';
+          	echo '<textarea name="projectdesc" class="message" id="cf_message" title="Description" value="" rows="50" cols="30" maxlength="4096">'.$projDesc.'</textarea>';
           	?>
         <!--size="30"-->
         	</div>
@@ -147,14 +147,26 @@ function MM_validateForm() { //v4.0
 					<th>Stakeholder Name</th>
 				</thead>
 				<tbody>
-					<tr>
-						<td>Manager</td>
-						<td>Joe Smith</td>
-					</tr>
-					<tr>
-						<td>regular user</td>
-						<td>Fred White</td>
-					</tr>
+				<?php
+				$findMgrQuery = "SELECT ProjMem.member AS member FROM ProjMem, Manager WHERE ProjMem.project='".$projName."' AND Manager.name=ProjMem.member";
+				$rst1 = $conn->Execute($findMgrQuery) or die($conn->errorMsg());
+				while (!$rst1->EOF) {
+					echo "<tr>";
+					echo "<td>Manager</td>";
+					echo "<td>".$rst1->fields['member']."</td>";
+					echo "</tr>";
+					$rst1->movenext();
+				}
+				$findUserQuery = "SELECT ProjMem.member AS member FROM ProjMem, RegularUser WHERE ProjMem.project='".$projName."' AND RegularUser.name=ProjMem.member";
+				$rst1 = $conn->Execute($findUserQuery) or die($conn->errorMsg());
+				while (!$rst1->EOF) {
+					echo "<tr>";
+					echo "<td>Regular User</td>";
+					echo "<td>".$rst1->fields['member']."</td>";
+					echo "</tr>";
+					$rst1->movenext();
+				}
+				?>
 				</tbody>
 			</table>	
 		</div>

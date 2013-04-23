@@ -30,7 +30,7 @@ if($rst==false) {
 }
 
 echo "<script language='javascript'>alert('Risk Update Successful!');</script>";
-echo "<script language='javascript'>window.location.href='setup.html';</script>";
+echo "<script language='javascript'>window.location.href='Manager_setup.html';</script>";
 
 //debug: for sprint 3, should change other tables too
 ?>

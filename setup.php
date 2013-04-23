@@ -42,6 +42,6 @@ else
 {
 	echo "<script>alert('Success');</script>";
 	//added the following line for Sprint I demo
-	echo "<script language='javascript'>window.location.href='setup.html';</script>";
+	echo "<script language='javascript'>window.location.href='Manager_setup.html';</script>";
 }
 ?>

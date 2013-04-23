@@ -135,13 +135,13 @@ function MM_validateForm() { //v4.0
 </div>
 <!--END of menu-->
 <!--This is the START of the content-->
-<div id="content">
+<div id="content" style="width:1200px">
   
   
   
   
 <!--This is the START of the contact section-->
-<div id="contact">
+<div id="contact" style="float:left;">
 	<h5 style="margin-top:0px;">Edit Stakeholder</h5>
 	
     <form method="post" action="deletestakeholder.php" name="delete_stakeholder_form" id="contactform">
@@ -186,6 +186,45 @@ function MM_validateForm() { //v4.0
     </form>
 </div>
 <!--END of contact section-->
+
+
+<div id="contact" style="float:left;text-align:center;">
+  	<h5 style="margin-top:0px;">Existing Stakeholders</h5><br>
+  	<table style="margin-left: 50px">
+		<thead>
+			<th>Role</th>
+			<th>Stakeholder Name</th>
+		</thead>
+		<tbody>
+  	<?php
+  		$managerName = $_SESSION['username'];	//get the name of manager, this managerName can actually be username too
+		$findProjQuery = "SELECT project FROM ProjMem WHERE member='".$managerName."'";
+		$strangeProjName = $conn->Execute($findProjQuery) or die($conn->errrorMsg()); //debug: the output is actually "project sth".
+		$projName = trim(substr($strangeProjName, 8)); //get the actual input name, trim removes all the whitespaces in the front and at the end
+		$findMgrQuery = "SELECT ProjMem.member AS member FROM ProjMem, Manager WHERE ProjMem.project='".$projName."' AND Manager.name=ProjMem.member";
+		$rst1 = $conn->Execute($findMgrQuery) or die($conn->errorMsg());
+		while (!$rst1->EOF) {
+			echo "<tr>";
+			echo "<td>Manager</td>";
+			echo "<td>".$rst1->fields['member']."</td>";
+			echo "</tr>";
+			$rst1->movenext();
+		}
+		$findUserQuery = "SELECT ProjMem.member AS member FROM ProjMem, RegularUser WHERE ProjMem.project='".$projName."' AND RegularUser.name=ProjMem.member";
+		$rst1 = $conn->Execute($findUserQuery) or die($conn->errorMsg());
+		while (!$rst1->EOF) {
+			echo "<tr>";
+			echo "<td>Regular User</td>";
+			echo "<td>".$rst1->fields['member']."</td>";
+			echo "</tr>";
+			$rst1->movenext();
+		}
+
+  	?>
+  	</tbody>
+	</table>	
+  </div>
+  <div style="clear:both;"></div>
   
   
 </div>

@@ -24,5 +24,5 @@ if($rst==false) {
 }
 //echo "<script>alert('Success');window.navigate(\"editstakeholder.php\");</script>";
 echo "<script language='javascript'>alert('Success!');</script>";
-echo "<script language='javascript'>window.location.href='setup.html';</script>";
+echo "<script language='javascript'>window.location.href='Manager_setup.html';</script>";
 ?>
