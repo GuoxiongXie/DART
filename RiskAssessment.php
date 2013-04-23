@@ -1,3 +1,49 @@
+<script language="javascript">
+/*Function:focus on the blank and alert the user to input the necessaries.
+*/
+function check(form, counter)
+{
+	counter = counter - 1;	//3
+	
+	var input1;
+	var input2;
+	var id1;
+	var id2;
+	
+	while (counter > 0) {
+		id1 = counter+"+1"; //debug: single quote or double? 
+		id2 = counter+"+2"; //debug: single quote or double? 
+		
+		input1before = document.getElementById(id1);
+		input2before = document.getElementById(id2);
+		
+		input1 = document.getElementById(id1).value;
+		input2 = document.getElementById(id2).value;
+		
+		if (input1=="" || input2=="" || input1==null || input2==null){	//debug: PUO and LUO are integers!! ""??
+			alert("Please do not leave the boxes blank. If you wish to abstain, enter 0 for both PUO and LUO.");
+			input1before.focus();
+			return false;
+		}
+		else if ( (input1==0 && input2!=0) || (input1!=0 && input2==0) ){
+			alert("If you wish to abstain, please enter 0 for both PUO and LUO.");
+			input1before.focus();
+			return false;
+		}
+		else if (input1>10 || input1<0 || input2>10 || input2<0){
+			alert("Values for PUO and LUO should be 0~10. Enter 0 for both PUO and LUO if you wish to abstain.");
+			input1before.focus();
+			return false;
+		}
+		
+		counter = counter - 1;
+	}
+	
+	form.submit();
+}
+</script>
+
+
 <?php
 //This action happens after manager or regular users clicks on "Risk Assessment" in the navigation bar on the left.
 //This file can be integrated with html to generate ballot table! (maybe this file is included in html file??)
@@ -169,8 +215,8 @@ function MM_validateForm() { //v4.0
 				<td><?php echo $counter; ?></td>
 				<td><?php echo $riskName; ?></td>
 				
-				<td><input style="width:25px" name="arr[pvalue][<?php echo $riskName;?>]" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
-				<td><input style="width:25px" name="arr[lvalue][<?php echo $riskName;?>]" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
+				<td><input style="width:25px" id="<?php echo $counter;?>+1" name="arr[pvalue][<?php echo $riskName;?>]" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
+				<td><input style="width:25px" id="<?php echo $counter;?>+2" name="arr[lvalue][<?php echo $riskName;?>]" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
 				<td><input name="arr[rationale][<?php echo $riskName;?>]" type="text" class="input" id="sender_name" title="riskname" value="" maxlength="100"/></td>
 				<!--<td><a href="RiskAssessment_detail.php" name="detail<?php echo $riskName;?>">+</a></td>-->
 				<td><a href="<?php echo "RiskAssessment_detail.php?name=".$riskName; ?>")">+</a></td>
@@ -185,7 +231,7 @@ function MM_validateForm() { //v4.0
   
 	<br/>
 	<div class="submitbtn">
-		<input type="submit" name='Save Votes' class="styled-button" onclick="return check(voting_form);" value="Save Votes" />
+		<input type="submit" name='Save Votes' class="styled-button" onclick="return check(voting_form, <?php echo $counter;?>);" value="Save Votes" />
     </div>  
 </form>
   </div>
