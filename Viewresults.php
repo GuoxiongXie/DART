@@ -131,7 +131,7 @@ if ($role == "admin") {
 ?>
 </h5>
 <h5 style="margin-top: 40px">Project Name:<font style="margin-left: 150px; color:#660000; "><?php echo $projectName; ?></font></h5>	
-<h5 style="margin-top: 40px">Last Assessment:<font style="margin-left: 150px; color:#660000; "><?php echo $lastAssessmentDate; ?></font><?php if ($closed != 0 ) { ?><button type="button" style="align:right;" onclick="window.location.href='<?php echo ExportCSV(); ?>'">Export CSV</button><?php } ?></h5>        
+<h5 style="margin-top: 40px">Last Assessment:<font style="margin-left: 150px; color:#660000; "><?php echo $lastAssessment; ?></font><?php if ($closed != 0 ) { ?><button type="button" style="align:right;" onclick="window.location.href='<?php echo ExportCSV(); ?>'">Export CSV</button><?php } ?></h5>        
 
 <div>
 <?php
