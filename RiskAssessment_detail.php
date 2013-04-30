@@ -215,7 +215,8 @@ function MM_validateForm() { //v4.0
 				<td><input style="width:25px" id="<?php echo $counter;?>+1" name="arr[pvalue][<?php echo $riskName;?>]" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
 				<td><input style="width:25px" id="<?php echo $counter;?>+2" name="arr[lvalue][<?php echo $riskName;?>]" type="text" class="input" id="sender_name" title="riskname" value="0" maxlength="2"/></td>
 				<td><input name="arr[rationale][<?php echo $riskName;?>]" type="text" class="input" id="sender_name" title="riskname" value="" maxlength="100"/></td>
-				<td><a href="RiskAssessment.php">+</a></td>
+				<!--<td><a href="RiskAssessment.php">+</a></td>-->
+				<td><a href="<?php echo "RiskAssessment_detail.php?name=".$riskName; ?>")">+</a></td>
 			  </tr>
 			
 			  <?php $getRiskRST->movenext(); ?>
