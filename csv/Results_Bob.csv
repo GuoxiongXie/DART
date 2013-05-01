@@ -1,4 +1,6 @@
-Project Name: Crowd Powered Photo Editor
+Project Name: Distributed Assessment of Risks Tool (DART)
 Last Assessment: 2013-04-23
 Rank, Risk Item, Last RE, Last 1 RE, Avg. P(UO), Avg. L(UO), Risk Mitigation Strategy, Last Updated
-1, Lack of Time, 56, 56, 7, 8, We can meet in a smaller group., 2013-04-23
+1, Lack of Time, 29, 24, 5, 5, We can meet in a smaller group or do online chatting., 2013-04-23
+2, Unfamiliarity with PHP , 22, 0, 4, 5, , 
+3, Lack of Space, 0, 0, 0, 0, , 

@@ -190,6 +190,8 @@ function MM_validateForm() { //v4.0
     <p>L(UO)- Size of Loss of Undesirable Outcome.</p>
     <p>&diams; For each risk, you can see votes from project stakeholders by clicking +/-</p>
     <p>&diams; Note that if you want to abstain from a risk item, enter 0 for both PUO and LUO.</p>
+    <p>&diams; Note that only Integers from 0~10 (inclusive) are acceptable for both PUO and LUO.</p>
+    <p>&diams; Please enter values for PUO and LUO for EACH risk item; the old values you entered are replaced by the new ones.</p>
 	<br/>
 	<h5>Project Name:</h5>
 	<h5 style="color: #660000"><?php echo $projName; ?></h5>

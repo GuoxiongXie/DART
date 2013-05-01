@@ -10,7 +10,7 @@ $role = $_SESSION['authority']; //manager, admin, user; here it only can be mana
 
 if ($role != "manager"){
 	echo "<script>alert('Sorry, but you have to be one of the project managers to close a voting period!');</script>";
-	echo "<script language='javascript'>window.location.href='setup.html';</script>";	//debug: go where??
+	echo "<script language='javascript'>window.location.href='setup.html';</script>";
 }
 
 $managerName = $_SESSION['username'];
